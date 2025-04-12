@@ -1,73 +1,66 @@
 package sn.uasz.UtilisateursAPI.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import sn.uasz.UtilisateursAPI.dtos.VacataireDTO;
 import sn.uasz.UtilisateursAPI.services.VacataireService;
-import lombok.RequiredArgsConstructor;
 
+/**
+ * Initialiseur de données pour les vacataires.
+ * Cette classe charge les données initiales des vacataires dans la base de données.
+ * 
+ * @author Omar Diop
+ * @version 1.0
+ * @since 2025-04-12
+ * 
+ * @see VacataireService
+ */
 @Configuration
 @RequiredArgsConstructor
-public class VacataireDataInitializer {
-    
+public class VacataireDataInitializer implements CommandLineRunner {
     private final VacataireService vacataireService;
 
-    @Bean
-    public CommandLineRunner init() {
-        return args -> {
-            try {
-                // Ajouter 5 vacataires de test
-                VacataireDTO vacataire1 = new VacataireDTO();
-                vacataire1.setNom("Dupont");
-                vacataire1.setPrenom("Jean");
-                vacataire1.setEmail("jean.dupont@example.com");
-                vacataire1.setTelephone("0123456789");
-                vacataire1.setSpecialite("Mathématiques");
-                vacataire1.setActif(true);
-                vacataireService.ajouterVacataire(vacataire1);
-                
-                VacataireDTO vacataire2 = new VacataireDTO();
-                vacataire2.setNom("Martin");
-                vacataire2.setPrenom("Marie");
-                vacataire2.setEmail("marie.martin@example.com");
-                vacataire2.setTelephone("0123456788");
-                vacataire2.setSpecialite("Français");
-                vacataire2.setActif(true);
-                vacataireService.ajouterVacataire(vacataire2);
-                
-                VacataireDTO vacataire3 = new VacataireDTO();
-                vacataire3.setNom("Dubois");
-                vacataire3.setPrenom("Pierre");
-                vacataire3.setEmail("pierre.dubois@example.com");
-                vacataire3.setTelephone("0123456787");
-                vacataire3.setSpecialite("Histoire");
-                vacataire3.setActif(true);
-                vacataireService.ajouterVacataire(vacataire3);
-                
-                VacataireDTO vacataire4 = new VacataireDTO();
-                vacataire4.setNom("Lefebvre");
-                vacataire4.setPrenom("Sophie");
-                vacataire4.setEmail("sophie.lefebvre@example.com");
-                vacataire4.setTelephone("0123456786");
-                vacataire4.setSpecialite("Anglais");
-                vacataire4.setActif(true);
-                vacataireService.ajouterVacataire(vacataire4);
-                
-                VacataireDTO vacataire5 = new VacataireDTO();
-                vacataire5.setNom("Moreau");
-                vacataire5.setPrenom("Thomas");
-                vacataire5.setEmail("thomas.moreau@example.com");
-                vacataire5.setTelephone("0123456785");
-                vacataire5.setSpecialite("Physique");
-                vacataire5.setActif(true);
-                vacataireService.ajouterVacataire(vacataire5);
-                
-                System.out.println("\n=== 5 vacataires ont été ajoutés avec succès ===\n");
-            } catch (Exception e) {
-                System.err.println("Erreur lors de l'initialisation des données : " + e.getMessage());
-                throw e;
-            }
-        };
+    /**
+     * Initialise les données des vacataires dans la base de données.
+     * 
+     * @param args Les arguments de la ligne de commande (non utilisés)
+     */
+    @Override
+    public void run(String... args) {
+        try {
+            // Création des vacataires de test
+            creerVacataireTest("Dupont", "Jean", "jean.dupont@univ-avignon.fr", "+33612345678", "Mathématiques");
+            creerVacataireTest("Martin", "Marie", "marie.martin@univ-avignon.fr", "+33623456789", "Français");
+            creerVacataireTest("Leroy", "Pierre", "pierre.leroy@univ-avignon.fr", "+33634567890", "Histoire");
+            creerVacataireTest("Dubois", "Sophie", "sophie.dubois@univ-avignon.fr", "+33645678901", "Anglais");
+            creerVacataireTest("Moreau", "Thomas", "thomas.moreau@univ-avignon.fr", "+33656789012", "Physique");
+            
+            System.out.println("\n=== 5 vacataires ont été ajoutés avec succès ===\n");
+        } catch (Exception e) {
+            System.err.println("Erreur lors de l'initialisation des données : " + e.getMessage());
+            throw e;
+        }
+    }
+
+    /**
+     * Crée un vacataire de test avec les données fournies.
+     * 
+     * @param nom Le nom du vacataire
+     * @param prenom Le prénom du vacataire
+     * @param email L'email du vacataire
+     * @param telephone Le numéro de téléphone du vacataire
+     * @param specialite La spécialité du vacataire
+     */
+    private void creerVacataireTest(String nom, String prenom, String email, String telephone, String specialite) {
+        VacataireDTO vacataireDTO = new VacataireDTO();
+        vacataireDTO.setNom(nom);
+        vacataireDTO.setPrenom(prenom);
+        vacataireDTO.setEmail(email);
+        vacataireDTO.setTelephone(telephone);
+        vacataireDTO.setSpecialite(specialite);
+        vacataireDTO.setActif(true);
+        
+        vacataireService.creerVacataire(vacataireDTO);
     }
 }
