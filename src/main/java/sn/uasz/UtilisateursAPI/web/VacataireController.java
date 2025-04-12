@@ -6,230 +6,164 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
 import sn.uasz.UtilisateursAPI.dtos.VacataireDTO;
-import sn.uasz.UtilisateursAPI.entities.Vacataire;
 import sn.uasz.UtilisateursAPI.services.VacataireService;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
- * Contrôleur REST pour la gestion des vacataires
+ * Contrôleur REST pour la gestion des vacataires.
+ * Ce contrôleur expose les endpoints REST pour interagir avec les vacataires.
  * 
  * @author Omar Diop
  * @version 1.0
- * @since 2025-04-11
+ * @since 2025-04-12
+ * 
+ * @see VacataireService
  */
-@Tag(name = "Vacataires", description = "API pour la gestion des vacataires")
 @RestController
 @RequestMapping("/api/vacataires")
-@Validated
+@Tag(name = "Vacataires", description = "API pour la gestion des vacataires")
 public class VacataireController {
-    
-    /**
-     * Service pour la gestion des vacataires
-     */
-    private final VacataireService vacataireService;
+    @Autowired
+    private VacataireService vacataireService;
 
     /**
-     * Constructeur avec injection de dépendance
+     * Crée un nouveau vacataire.
      * 
-     * @param vacataireService le service pour la gestion des vacataires
+     * @param vacataireDTO Les données du vacataire à créer
+     * @return Le DTO du vacataire créé
      */
-    public VacataireController(VacataireService vacataireService) {
-        this.vacataireService = vacataireService;
-    }
-
-    /**
-     * Récupérer les informations d'un vacataire spécifique
-     * 
-     * @param id l'identifiant du vacataire
-     * @return les informations du vacataire
-     */
-    @Operation(
-        summary = "Récupérer un vacataire",
-        description = "Récupère les informations d'un vacataire spécifique",
-        responses = {
-            @ApiResponse(
-                responseCode = "200",
-                description = "Vacataire trouvé",
-                content = @Content(schema = @Schema(implementation = VacataireDTO.class))
-            ),
-            @ApiResponse(
-                responseCode = "404",
-                description = "Vacataire non trouvé"
-            )
-        }
-    )
-    @GetMapping("/{id}")
-    public ResponseEntity<VacataireDTO> obtenirVacataire(@Parameter(description = "Identifiant du vacataire") @PathVariable Long id) {
-        return ResponseEntity.ok(vacataireService.obtenirVacataire(id));
-    }
-
-    /**
-     * Lister tous les vacataires
-     * 
-     * @return la liste de tous les vacataires
-     */
-    @Operation(
-        summary = "Lister tous les vacataires",
-        description = "Récupère la liste de tous les vacataires",
-        responses = {
-            @ApiResponse(
-                responseCode = "200",
-                description = "Liste des vacataires",
-                content = @Content(schema = @Schema(implementation = List.class))
-            )
-        }
-    )
-    @GetMapping
-    public ResponseEntity<List<VacataireDTO>> listerVacataires() {
-        List<Vacataire> listeVacataires = vacataireService.findAll();
-        List<VacataireDTO> listeDTOs = listeVacataires.stream()
-            .map(vacataire -> {
-                VacataireDTO dto = new VacataireDTO();
-                dto.setId(vacataire.getId());
-                dto.setNom(vacataire.getNom());
-                dto.setPrenom(vacataire.getPrenom());
-                dto.setEmail(vacataire.getEmail());
-                dto.setTelephone(vacataire.getTelephone());
-                dto.setSpecialite(vacataire.getSpecialite());
-                dto.setActif(vacataire.isActif());
-                return dto;
-            })
-            .collect(Collectors.toList());
-        return ResponseEntity.ok(listeDTOs);
-    }
-
-    /**
-     * Ajouter un nouveau vacataire
-     * 
-     * @param vacataireDTO les informations du nouveau vacataire
-     * @return le vacataire ajouté avec son ID
-     */
-    @Operation(
-        summary = "Ajouter un nouveau vacataire",
-        description = "Crée un nouveau vacataire avec les informations fournies",
-        responses = {
-            @ApiResponse(
-                responseCode = "200",
-                description = "Vacataire ajouté avec succès",
-                content = @Content(schema = @Schema(implementation = VacataireDTO.class))
-            )
-        }
-    )
+    @Operation(summary = "Créer un nouveau vacataire")
+    @ApiResponse(responseCode = "201", description = "Vacataire créé avec succès",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = VacataireDTO.class)))
     @PostMapping
-    public ResponseEntity<VacataireDTO> ajouterVacataire(@Valid @RequestBody VacataireDTO vacataireDTO) {
-        return ResponseEntity.ok(vacataireService.ajouterVacataire(vacataireDTO));
+    public ResponseEntity<VacataireDTO> creerVacataire(
+            @Parameter(description = "Données du vacataire à créer")
+            @RequestBody @Validated VacataireDTO vacataireDTO) {
+        VacataireDTO createdVacataire = vacataireService.creerVacataire(vacataireDTO);
+        return new ResponseEntity<>(createdVacataire, HttpStatus.CREATED);
     }
 
     /**
-     * Modifier les informations d'un vacataire existant
+     * Récupère un vacataire par son ID.
      * 
-     * @param id l'identifiant du vacataire à modifier
-     * @param vacataireDTO les nouvelles informations du vacataire
-     * @return le vacataire modifié
+     * @param id L'identifiant du vacataire
+     * @return Le DTO du vacataire trouvé ou 404 si non trouvé
      */
-    @Operation(
-        summary = "Modifier un vacataire existant",
-        description = "Met à jour les informations d'un vacataire existant",
-        responses = {
-            @ApiResponse(
-                responseCode = "200",
-                description = "Vacataire modifié avec succès",
-                content = @Content(schema = @Schema(implementation = VacataireDTO.class))
-            )
+    @Operation(summary = "Récupérer un vacataire par ID")
+    @ApiResponse(responseCode = "200", description = "Vacataire trouvé",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = VacataireDTO.class)))
+    @ApiResponse(responseCode = "404", description = "Vacataire non trouvé")
+    @GetMapping("/{id}")
+    public ResponseEntity<VacataireDTO> getVacataire(
+            @Parameter(description = "ID du vacataire à récupérer")
+            @PathVariable Long id) {
+        VacataireDTO vacataire = vacataireService.getVacataire(id);
+        if (vacataire == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-    )
+        return new ResponseEntity<>(vacataire, HttpStatus.OK);
+    }
+
+    /**
+     * Met à jour un vacataire existant.
+     * 
+     * @param id L'identifiant du vacataire à mettre à jour
+     * @param vacataireDTO Les nouvelles données du vacataire
+     * @return Le DTO du vacataire mis à jour
+     */
+    @Operation(summary = "Mettre à jour un vacataire")
+    @ApiResponse(responseCode = "200", description = "Vacataire mis à jour avec succès",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = VacataireDTO.class)))
+    @ApiResponse(responseCode = "404", description = "Vacataire non trouvé")
     @PutMapping("/{id}")
-    public ResponseEntity<VacataireDTO> modifierVacataire(
-            @Parameter(description = "Identifiant du vacataire") @PathVariable Long id,
-            @Valid @RequestBody VacataireDTO vacataireDTO) {
-        return ResponseEntity.ok(vacataireService.modifierVacataire(id, vacataireDTO));
+    public ResponseEntity<VacataireDTO> mettreAJourVacataire(
+            @Parameter(description = "ID du vacataire à mettre à jour")
+            @PathVariable Long id,
+            @Parameter(description = "Nouvelles données du vacataire")
+            @RequestBody @Validated VacataireDTO vacataireDTO) {
+        VacataireDTO updatedVacataire = vacataireService.mettreAJourVacataire(id, vacataireDTO);
+        return new ResponseEntity<>(updatedVacataire, HttpStatus.OK);
     }
 
     /**
-     * Supprimer un vacataire
+     * Supprime un vacataire du système.
      * 
-     * @param id l'identifiant du vacataire à supprimer
-     * @return une réponse vide
+     * @param id L'identifiant du vacataire à supprimer
+     * @return 204 si la suppression a réussi, 404 si le vacataire n'existe pas
      */
-    @Operation(
-        summary = "Supprimer un vacataire",
-        description = "Supprime un vacataire existant",
-        responses = {
-            @ApiResponse(
-                responseCode = "200",
-                description = "Vacataire supprimé avec succès"
-            )
-        }
-    )
+    @Operation(summary = "Supprimer un vacataire")
+    @ApiResponse(responseCode = "204", description = "Vacataire supprimé avec succès")
+    @ApiResponse(responseCode = "404", description = "Vacataire non trouvé")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> supprimerVacataire(@Parameter(description = "Identifiant du vacataire") @PathVariable Long id) {
-        vacataireService.supprimerVacataire(id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Void> supprimerVacataire(
+            @Parameter(description = "ID du vacataire à supprimer")
+            @PathVariable Long id) {
+        boolean deleted = vacataireService.supprimerVacataire(id);
+        if (!deleted) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     /**
-     * Désactiver un vacataire (rendre inactif)
+     * Récupère tous les vacataires actifs.
      * 
-     * @param id l'identifiant du vacataire à désactiver
-     * @return une réponse vide
+     * @return La liste des vacataires actifs
      */
-    @Operation(
-        summary = "Désactiver un vacataire",
-        description = "Rend un vacataire inactif",
-        responses = {
-            @ApiResponse(
-                responseCode = "200",
-                description = "Vacataire désactivé avec succès"
-            )
-        }
-    )
+    @Operation(summary = "Lister tous les vacataires actifs")
+    @ApiResponse(responseCode = "200", description = "Liste des vacataires actifs",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = VacataireDTO.class)))
+    @GetMapping
+    public ResponseEntity<List<VacataireDTO>> getAllVacatairesActifs() {
+        List<VacataireDTO> vacataires = vacataireService.getAllVacatairesActifs();
+        return new ResponseEntity<>(vacataires, HttpStatus.OK);
+    }
+
+    /**
+     * Désactive un vacataire.
+     * 
+     * @param id L'identifiant du vacataire à désactiver
+     * @return Le DTO du vacataire désactivé
+     */
+    @Operation(summary = "Désactiver un vacataire")
+    @ApiResponse(responseCode = "200", description = "Vacataire désactivé avec succès",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = VacataireDTO.class)))
+    @ApiResponse(responseCode = "404", description = "Vacataire non trouvé")
     @PostMapping("/{id}/desactiver")
-    public ResponseEntity<Void> desactiverVacataire(@Parameter(description = "Identifiant du vacataire") @PathVariable Long id) {
-        vacataireService.desactiverVacataire(id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<VacataireDTO> desactiverVacataire(
+            @Parameter(description = "ID du vacataire à désactiver")
+            @PathVariable Long id) {
+        VacataireDTO vacataire = vacataireService.desactiverVacataire(id);
+        return new ResponseEntity<>(vacataire, HttpStatus.OK);
     }
 
     /**
-     * Activer un vacataire (rendre actif)
+     * Réactive un vacataire.
      * 
-     * @param id l'identifiant du vacataire à activer
-     * @return une réponse vide
+     * @param id L'identifiant du vacataire à réactiver
+     * @return Le DTO du vacataire réactivé
      */
-    @Operation(
-        summary = "Activer un vacataire",
-        description = "Rend un vacataire actif",
-        responses = {
-            @ApiResponse(
-                responseCode = "200",
-                description = "Vacataire activé avec succès"
-            )
-        }
-    )
-    @PostMapping("/{id}/activer")
-    public ResponseEntity<Void> activerVacataire(@Parameter(description = "Identifiant du vacataire") @PathVariable Long id) {
-        vacataireService.activerVacataire(id);
-        return ResponseEntity.ok().build();
-    }
-
-    /**
-     * Gérer les exceptions
-     * 
-     * @param ex l'exception à gérer
-     * @return une réponse d'erreur avec le message
-     */
-    @Operation(
-        summary = "Gérer les erreurs",
-        description = "Gère les erreurs runtime et retourne un message d'erreur approprié"
-    )
-    @ExceptionHandler({RuntimeException.class})
-    public ResponseEntity<Map<String, String>> handleException(RuntimeException ex) {
-        return ResponseEntity.badRequest().body(Map.of("message", ex.getMessage()));
+    @Operation(summary = "Réactiver un vacataire")
+    @ApiResponse(responseCode = "200", description = "Vacataire réactivé avec succès",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = VacataireDTO.class)))
+    @ApiResponse(responseCode = "404", description = "Vacataire non trouvé")
+    @PostMapping("/{id}/reactiver")
+    public ResponseEntity<VacataireDTO> reactivierVacataire(
+            @Parameter(description = "ID du vacataire à réactiver")
+            @PathVariable Long id) {
+        VacataireDTO vacataire = vacataireService.reactivierVacataire(id);
+        return new ResponseEntity<>(vacataire, HttpStatus.OK);
     }
 }
