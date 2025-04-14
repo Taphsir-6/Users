@@ -1,4 +1,4 @@
-package sn.uasz.UtilisateursAPI.dtos;
+package sn.uasz.utilisateursapi.dtos;
 
 import lombok.*;
 

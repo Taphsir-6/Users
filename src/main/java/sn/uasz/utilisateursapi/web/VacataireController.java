@@ -1,4 +1,4 @@
-package sn.uasz.UtilisateursAPI.web;
+package sn.uasz.utilisateursapi.web;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,8 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import sn.uasz.UtilisateursAPI.dtos.VacataireDTO;
-import sn.uasz.UtilisateursAPI.services.VacataireService;
+import sn.uasz.utilisateursapi.dtos.VacataireDTO;
+import sn.uasz.utilisateursapi.services.VacataireService;
 import java.util.List;
 
 /**

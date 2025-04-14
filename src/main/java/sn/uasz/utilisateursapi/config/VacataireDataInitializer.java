@@ -1,10 +1,10 @@
-package sn.uasz.UtilisateursAPI.config;
+package sn.uasz.utilisateursapi.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
-import sn.uasz.UtilisateursAPI.dtos.VacataireDTO;
-import sn.uasz.UtilisateursAPI.services.VacataireService;
+import sn.uasz.utilisateursapi.dtos.VacataireDTO;
+import sn.uasz.utilisateursapi.services.VacataireService;
 
 /**
  * Initialiseur de données pour les vacataires.

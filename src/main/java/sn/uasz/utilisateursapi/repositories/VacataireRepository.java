@@ -7,11 +7,11 @@
  * @version 1.0
  * @since 2025-04-12
  */
-package sn.uasz.UtilisateursAPI.repositories;
+package sn.uasz.utilisateursapi.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import sn.uasz.UtilisateursAPI.entities.Vacataire;
+import sn.uasz.utilisateursapi.entities.Vacataire;
 import java.util.List;
 import java.util.Optional;
 

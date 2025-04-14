@@ -6,7 +6,7 @@
  * @version 1.0
  * @since 2025-04-12
  */
-package sn.uasz.UtilisateursAPI;
+package sn.uasz.utilisateursapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

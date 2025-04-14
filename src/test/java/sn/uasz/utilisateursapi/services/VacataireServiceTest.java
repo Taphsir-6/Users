@@ -6,7 +6,7 @@
  * @version 1.0
  * @since 2025-04-12
  */
-package sn.uasz.UtilisateursAPI.services;
+package sn.uasz.utilisateursapi.services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,9 +14,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import sn.uasz.UtilisateursAPI.dtos.VacataireDTO;
-import sn.uasz.UtilisateursAPI.entities.Vacataire;
-import sn.uasz.UtilisateursAPI.repositories.VacataireRepository;
+import sn.uasz.utilisateursapi.dtos.VacataireDTO;
+import sn.uasz.utilisateursapi.entities.Vacataire;
+import sn.uasz.utilisateursapi.repositories.VacataireRepository;
 
 import java.util.List;
 import java.util.Optional;

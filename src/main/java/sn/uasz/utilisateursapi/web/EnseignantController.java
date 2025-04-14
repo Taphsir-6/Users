@@ -1,4 +1,4 @@
-package sn.uasz.UtilisateursAPI.web;
+package sn.uasz.utilisateursapi.web;
 
 public class EnseignantController {
 }

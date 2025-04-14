@@ -6,14 +6,14 @@
  * @version 1.0
  * @since 2025-04-12
  */
-package sn.uasz.UtilisateursAPI.services;
+package sn.uasz.utilisateursapi.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sn.uasz.UtilisateursAPI.dtos.VacataireDTO;
-import sn.uasz.UtilisateursAPI.entities.Vacataire;
-import sn.uasz.UtilisateursAPI.repositories.VacataireRepository;
+import sn.uasz.utilisateursapi.dtos.VacataireDTO;
+import sn.uasz.utilisateursapi.entities.Vacataire;
+import sn.uasz.utilisateursapi.repositories.VacataireRepository;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;

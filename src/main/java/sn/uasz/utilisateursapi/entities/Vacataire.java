@@ -1,4 +1,4 @@
-package sn.uasz.UtilisateursAPI.entities;
+package sn.uasz.utilisateursapi.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;

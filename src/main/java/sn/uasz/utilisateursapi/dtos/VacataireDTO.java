@@ -1,4 +1,4 @@
-package sn.uasz.UtilisateursAPI.dtos;
+package sn.uasz.utilisateursapi.dtos;
 
 import lombok.Data;
 import jakarta.validation.constraints.Email;
