@@ -7,13 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EnseignantDTO {
-    private Long id;
-    private String email;
-    private String prenom;
-    private String nom;
-    private String matricule;
-    private String grade;
+public class ActivationDTO {
     private boolean actif;
 }
-
