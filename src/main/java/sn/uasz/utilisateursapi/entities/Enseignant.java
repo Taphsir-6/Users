@@ -1,4 +1,4 @@
-package sn.uasz.UtilisateursAPI.entities;
+package sn.uasz.utilisateursapi.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,7 +16,7 @@ import lombok.*;
 public class Enseignant {
     /** Identifiant unique de l'enseignant */
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     /** Nom de l'enseignant */
     private String nom;
