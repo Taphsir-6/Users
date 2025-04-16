@@ -70,7 +70,7 @@ public class Vacataire {
      * Numéro de téléphone du vacataire.
      * Format : +33612345678
      */
-    @Pattern(regexp = "^\\+33[0-9]{9}$", message = "Format de téléphone invalide")
+    @Pattern(regexp = "^(\\+33\\s?\\d{9}|0\\s?\\d{9})$", message = "Format de téléphone invalide. Formats acceptés : +33612345678, 0612345678, +33 6 12 34 56 78, 06 12 34 56 78")
     private String telephone;
 
     /**

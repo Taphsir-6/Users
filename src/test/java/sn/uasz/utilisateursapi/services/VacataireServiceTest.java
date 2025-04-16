@@ -17,7 +17,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import sn.uasz.utilisateursapi.dtos.VacataireDTO;
 import sn.uasz.utilisateursapi.entities.Vacataire;
 import sn.uasz.utilisateursapi.repositories.VacataireRepository;
+import sn.uasz.utilisateursapi.exceptions.VacataireNotFoundException;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class VacataireServiceTest {
+class VacataireServiceTest {
 
     @Mock
     private VacataireRepository vacataireRepository;
@@ -98,11 +100,10 @@ public class VacataireServiceTest {
         // Given
         when(vacataireRepository.findByIdAndActif(1L, true)).thenReturn(Optional.empty());
 
-        // When
-        VacataireDTO result = vacataireService.getVacataire(1L);
-
-        // Then
-        assertNull(result);
+        // When & Then
+        assertThrows(VacataireNotFoundException.class, () -> {
+            vacataireService.getVacataire(1L);
+        });
         verify(vacataireRepository, times(1)).findByIdAndActif(1L, true);
     }
 
@@ -197,10 +198,101 @@ public class VacataireServiceTest {
         when(vacataireRepository.findByIdAndActif(1L, true)).thenReturn(Optional.empty());
 
         // When & Then
-        assertThrows(RuntimeException.class, () -> vacataireService.desactiverVacataire(1L));
+        assertThrows(VacataireNotFoundException.class, () -> vacataireService.desactiverVacataire(1L));
         verify(vacataireRepository, times(1)).findByIdAndActif(1L, true);
-        verify(vacataireRepository, times(0)).save(any(Vacataire.class));
+        verify(vacataireRepository, never()).save(any(Vacataire.class));
     }
+
+    @Test
+    void testMettreAJourVacataire() {
+        // Given
+        when(vacataireRepository.findByIdAndActif(1L, true)).thenReturn(Optional.of(vacataireTest));
+        doAnswer(invocation -> {
+            Vacataire saved = invocation.getArgument(0);
+            saved.setNom(vacataireDTO.getNom());
+            saved.setPrenom(vacataireDTO.getPrenom());
+            saved.setEmail(vacataireDTO.getEmail());
+            saved.setTelephone(vacataireDTO.getTelephone());
+            saved.setSpecialite(vacataireDTO.getSpecialite());
+            saved.setActif(vacataireDTO.isActif());
+            saved.setDateModification(new Date());
+            return saved;
+        }).when(vacataireRepository).save(any(Vacataire.class));
+
+        // When
+        VacataireDTO result = vacataireService.mettreAJourVacataire(1L, vacataireDTO);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(vacataireDTO.getNom(), result.getNom());
+        assertEquals(vacataireDTO.getPrenom(), result.getPrenom());
+        assertEquals(vacataireDTO.getEmail(), result.getEmail());
+        assertEquals(vacataireDTO.getTelephone(), result.getTelephone());
+        assertEquals(vacataireDTO.getSpecialite(), result.getSpecialite());
+        assertEquals(vacataireDTO.isActif(), result.isActif());
+        verify(vacataireRepository, times(1)).findByIdAndActif(1L, true);
+        verify(vacataireRepository, times(1)).save(any(Vacataire.class));
+    }
+
+    @Test
+    void testGetVacataireByEmailExiste() {
+        // Given
+        when(vacataireRepository.findByEmail("test@example.com")).thenReturn(vacataireTest);
+
+        // When
+        VacataireDTO result = vacataireService.getVacataireByEmail("test@example.com");
+
+        // Then
+        assertNotNull(result);
+        assertEquals(vacataireTest.getNom(), result.getNom());
+        assertEquals(vacataireTest.getPrenom(), result.getPrenom());
+        assertEquals(vacataireTest.getEmail(), result.getEmail());
+        verify(vacataireRepository, times(1)).findByEmail("test@example.com");
+    }
+
+    @Test
+    void testGetVacataireByEmailNExistePas() {
+        // Given
+        when(vacataireRepository.findByEmail("test@example.com")).thenReturn(null);
+
+        // When
+        VacataireDTO result = vacataireService.getVacataireByEmail("test@example.com");
+
+        // Then
+        assertNull(result);
+        verify(vacataireRepository, times(1)).findByEmail("test@example.com");
+    }
+
+    @Test
+    void testActiverVacataireExiste() {
+        // Given
+        when(vacataireRepository.findById(1L)).thenReturn(Optional.of(vacataireTest));
+        when(vacataireRepository.save(any(Vacataire.class))).thenAnswer(invocation -> {
+            Vacataire saved = invocation.getArgument(0);
+            saved.setActif(true);
+            saved.setDateModification(new Date());
+            return saved;
+        });
+
+        // When
+        vacataireService.activerVacataire(1L);
+
+        // Then
+        verify(vacataireRepository, times(1)).findById(1L);
+        verify(vacataireRepository, times(1)).save(any(Vacataire.class));
+    }
+
+    @Test
+    void testActiverVacataireNonExistant() {
+        // Given
+        when(vacataireRepository.findById(1L)).thenReturn(Optional.empty());
+
+        // When & Then
+        assertThrows(VacataireNotFoundException.class, () -> vacataireService.activerVacataire(1L));
+        verify(vacataireRepository, times(1)).findById(1L);
+        verify(vacataireRepository, never()).save(any(Vacataire.class));
+    }
+
 
     @Test
     void testReactivierVacataire() {
@@ -209,6 +301,7 @@ public class VacataireServiceTest {
         doAnswer(invocation -> {
             Vacataire saved = invocation.getArgument(0);
             saved.setActif(true);
+            saved.setDateModification(new Date());
             return saved;
         }).when(vacataireRepository).save(any(Vacataire.class));
 
@@ -220,6 +313,7 @@ public class VacataireServiceTest {
         assertTrue(result.isActif());
         verify(vacataireRepository, times(1)).findById(1L);
         verify(vacataireRepository, times(1)).save(any(Vacataire.class));
+        verify(vacataireRepository, never()).findByIdAndActif(anyLong(), anyBoolean());
     }
 
     @Test
@@ -228,8 +322,8 @@ public class VacataireServiceTest {
         when(vacataireRepository.findById(1L)).thenReturn(Optional.empty());
 
         // When & Then
-        assertThrows(RuntimeException.class, () -> vacataireService.reactivierVacataire(1L));
+        assertThrows(VacataireNotFoundException.class, () -> vacataireService.reactivierVacataire(1L));
         verify(vacataireRepository, times(1)).findById(1L);
-        verify(vacataireRepository, times(0)).save(any(Vacataire.class));
+        verify(vacataireRepository, never()).save(any(Vacataire.class));
     }
 }
