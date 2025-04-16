@@ -6,14 +6,17 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import sn.uasz.utilisateursapi.dtos.VacataireDTO;
+import sn.uasz.utilisateursapi.exceptions.VacataireNotFoundException;
 import sn.uasz.utilisateursapi.services.VacataireService;
 import java.util.List;
+
+@Slf4j
 
 /**
  * Contrôleur REST pour la gestion des vacataires.
@@ -29,8 +32,23 @@ import java.util.List;
 @RequestMapping("/api/vacataires")
 @Tag(name = "Vacataires", description = "API pour la gestion des vacataires")
 public class VacataireController {
-    @Autowired
-    private VacataireService vacataireService;
+    private final VacataireService vacataireService;
+
+    public VacataireController(VacataireService vacataireService) {
+        this.vacataireService = vacataireService;
+    }
+
+    @ExceptionHandler(VacataireNotFoundException.class)
+    public ResponseEntity<String> handleVacataireNotFoundException(VacataireNotFoundException ex) {
+        log.error("Erreur lors de la gestion du vacataire : {}", ex.getMessage());
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception ex) {
+        log.error("Erreur inattendue : {}", ex.getMessage(), ex);
+        return new ResponseEntity<>("Une erreur inattendue est survenue", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     /**
      * Crée un nouveau vacataire.
@@ -65,11 +83,18 @@ public class VacataireController {
     public ResponseEntity<VacataireDTO> getVacataire(
             @Parameter(description = "ID du vacataire à récupérer")
             @PathVariable Long id) {
-        VacataireDTO vacataire = vacataireService.getVacataire(id);
-        if (vacataire == null) {
+        try {
+            VacataireDTO vacataire = vacataireService.getVacataire(id);
+            if (vacataire == null) {
+                log.warn("Vacataire non trouvé avec l'ID : {}", id);
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            log.info("Vacataire récupéré avec succès : {}", id);
+            return new ResponseEntity<>(vacataire, HttpStatus.OK);
+        } catch (VacataireNotFoundException e) {
+            log.error("Erreur lors de la récupération du vacataire : {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(vacataire, HttpStatus.OK);
     }
 
     /**

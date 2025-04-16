@@ -9,15 +9,22 @@
 package sn.uasz.utilisateursapi.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import jakarta.validation.constraints.NotNull;
 import sn.uasz.utilisateursapi.dtos.VacataireDTO;
 import sn.uasz.utilisateursapi.entities.Vacataire;
+import sn.uasz.utilisateursapi.exceptions.VacataireNotFoundException;
 import sn.uasz.utilisateursapi.repositories.VacataireRepository;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+@Validated
+@Slf4j
 
 /**
  * Service métier pour la gestion des vacataires.
@@ -89,10 +96,14 @@ public class VacataireService {
      * @param id L'identifiant du vacataire
      * @return Le DTO du vacataire trouvé ou null si non trouvé
      */
-    public VacataireDTO getVacataire(Long id) {
-        return vacataireRepository.findByIdAndActif(id, true)
-                .map(this::convertToDTO)
-                .orElse(null);
+    public VacataireDTO getVacataire(@NotNull(message = "L'ID du vacataire ne peut pas être null") Long id) {
+        Optional<Vacataire> vacataireOpt = vacataireRepository.findByIdAndActif(id, true);
+        if (!vacataireOpt.isPresent()) {
+            log.warn("Vacataire non trouvé avec l'ID : {}", id);
+            throw new VacataireNotFoundException("Vacataire avec l'ID " + id + " non trouvé");
+        }
+        log.info("Vacataire trouvé avec succès : {}", id);
+        return convertToDTO(vacataireOpt.get());
     }
 
     /**
@@ -116,7 +127,7 @@ public class VacataireService {
                     vacataire.setDateModification(new Date());
                     return convertToDTO(vacataireRepository.save(vacataire));
                 })
-                .orElseThrow(() -> new RuntimeException("Vacataire non trouvé"));
+                .orElseThrow(() -> new VacataireNotFoundException("Vacataire non trouvé avec l'ID " + id));
     }
 
     /**
@@ -125,10 +136,10 @@ public class VacataireService {
      * @return La liste des vacataires actifs
      */
     public List<VacataireDTO> getAllVacatairesActifs() {
-        List<Vacataire> vacataires = vacataireRepository.findByActif(true);
-        return vacataires.stream()
+        return vacataireRepository.findByActif(true)
+                .stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -136,17 +147,19 @@ public class VacataireService {
      * 
      * @param id L'identifiant du vacataire à désactiver
      * @return Le DTO du vacataire désactivé
-     * @throws RuntimeException Si le vacataire n'existe pas
+     * @throws VacataireNotFoundException Si le vacataire n'existe pas
      */
     @Transactional
     public VacataireDTO desactiverVacataire(Long id) {
-        return vacataireRepository.findByIdAndActif(id, true)
-                .map(vacataire -> {
-                    vacataire.setActif(false);
-                    vacataire.setDateModification(new Date());
-                    return convertToDTO(vacataireRepository.save(vacataire));
-                })
-                .orElseThrow(() -> new RuntimeException("Vacataire non trouvé"));
+        Optional<Vacataire> optionalVacataire = vacataireRepository.findByIdAndActif(id, true);
+        if (!optionalVacataire.isPresent()) {
+            log.warn("Tentative de désactivation d'un vacataire non trouvé avec l'ID : {}", id);
+            throw new VacataireNotFoundException("Vacataire non trouvé avec l'ID " + id);
+        }
+        Vacataire vacataire = optionalVacataire.get();
+        vacataire.setActif(false);
+        vacataire.setDateModification(new Date());
+        return convertToDTO(vacataireRepository.save(vacataire));
     }
 
     /**
@@ -154,17 +167,20 @@ public class VacataireService {
      * 
      * @param id L'identifiant du vacataire à réactiver
      * @return Le DTO du vacataire réactivé
-     * @throws RuntimeException Si le vacataire n'existe pas
+     * @throws VacataireNotFoundException Si le vacataire n'existe pas
      */
     @Transactional
-    public VacataireDTO reactivierVacataire(Long id) {
-        return vacataireRepository.findById(id)
-                .map(vacataire -> {
-                    vacataire.setActif(true);
-                    vacataire.setDateModification(new Date());
-                    return convertToDTO(vacataireRepository.save(vacataire));
-                })
-                .orElseThrow(() -> new RuntimeException("Vacataire non trouvé"));
+    public VacataireDTO reactivierVacataire(@NotNull(message = "L'ID du vacataire ne peut pas être null") Long id) {
+        Optional<Vacataire> optionalVacataire = vacataireRepository.findById(id);
+        if (!optionalVacataire.isPresent()) {
+            log.warn("Tentative de réactivation d'un vacataire non trouvé avec l'ID : {}", id);
+            throw new VacataireNotFoundException("Vacataire non trouvé avec l'ID " + id);
+        }
+        
+        Vacataire vacataire = optionalVacataire.get();
+        vacataire.setActif(true);
+        vacataire.setDateModification(new Date());
+        return convertToDTO(vacataireRepository.save(vacataire));
     }
 
     /**
@@ -174,13 +190,14 @@ public class VacataireService {
      * @return true si la suppression a réussi, false sinon
      */
     @Transactional
-    public boolean supprimerVacataire(Long id) {
-        return vacataireRepository.findByIdAndActif(id, true)
-                .map(vacataire -> {
-                    vacataireRepository.delete(vacataire);
-                    return true;
-                })
-                .orElse(false);
+    public boolean supprimerVacataire(@NotNull(message = "L'ID du vacataire ne peut pas être null") Long id) {
+        Optional<Vacataire> optionalVacataire = vacataireRepository.findByIdAndActif(id, true);
+        if (!optionalVacataire.isPresent()) {
+            log.warn("Tentative de suppression d'un vacataire non trouvé avec l'ID : {}", id);
+            return false;
+        }
+        vacataireRepository.delete(optionalVacataire.get());
+        return true;
     }
 
     /**
@@ -198,23 +215,21 @@ public class VacataireService {
      * Active un vacataire du système.
      * 
      * @param id L'identifiant du vacataire à activer
+     * @throws IllegalArgumentException Si le vacataire n'existe pas
      */
     @Transactional
-    public void activerVacataire(Long id) {
+    public void activerVacataire(@NotNull(message = "L'ID du vacataire ne peut pas être null") Long id) {
         Optional<Vacataire> optionalVacataire = vacataireRepository.findById(id);
         if (!optionalVacataire.isPresent()) {
-            throw new RuntimeException("Vacataire non trouvé avec l'ID : " + id);
+            log.warn("Tentative d'activation d'un vacataire non trouvé avec l'ID : {}", id);
+            throw new VacataireNotFoundException("Vacataire non trouvé avec l'ID " + id);
         }
         
         Vacataire vacataire = optionalVacataire.get();
         vacataire.setActif(true);
         vacataire.setDateModification(new Date());
-        
-        // Détacher l'entité
-        //entityManager.detach(vacataire);
-        
-        // Sauvegarder avec une nouvelle transaction
         vacataireRepository.save(vacataire);
+        log.info("Vacataire activé avec succès : {}", id);
     }
 
     /**
