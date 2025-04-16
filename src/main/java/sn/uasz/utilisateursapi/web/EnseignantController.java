@@ -44,7 +44,7 @@ public class EnseignantController {
      */
     @Operation(summary = "Récupérer un enseignant par son ID")
     @GetMapping("/{id}")
-    public ResponseEntity<EnseignantDTO> obtenirEnseignant(@PathVariable int id) {
+    public ResponseEntity<EnseignantDTO> obtenirEnseignant(@PathVariable Long id) {
         EnseignantDTO enseignant = enseignantService.obtenirEnseignantParId(id);
         return ResponseEntity.ok(enseignant);
     }
@@ -55,7 +55,7 @@ public class EnseignantController {
     @Operation(summary = "Modifier un enseignant existant")
     @PutMapping("/{id}")
     public ResponseEntity<EnseignantDTO> modifierEnseignant(
-            @PathVariable int id,
+            @PathVariable Long id,
             @RequestBody EnseignantDTO enseignantDTO) {
         EnseignantDTO enseignantModifie = enseignantService.modifierEnseignant(id, enseignantDTO);
         return ResponseEntity.ok(enseignantModifie);
@@ -66,7 +66,7 @@ public class EnseignantController {
      */
     @Operation(summary = "Supprimer un enseignant")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> supprimerEnseignant(@PathVariable int id) {
+    public ResponseEntity<Void> supprimerEnseignant(@PathVariable Long id) {
         enseignantService.supprimerEnseignant(id);
         return ResponseEntity.noContent().build();
     }

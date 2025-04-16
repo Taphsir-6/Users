@@ -5,6 +5,6 @@ import sn.uasz.utilisateursapi.entities.Enseignant;
 
 import java.util.List;
 
-public interface EnseignantRepository extends JpaRepository<Enseignant, Integer> {
+public interface EnseignantRepository extends JpaRepository<Enseignant, Long> {
     List<Enseignant> findByNomContainingIgnoreCase(String nom);
 }

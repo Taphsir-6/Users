@@ -4,7 +4,7 @@ import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 
 public record EnseignantDTO(
-        Integer id,
+        Long id,
 
         @NotBlank @Size(min = 2, max = 50)
         String nom,

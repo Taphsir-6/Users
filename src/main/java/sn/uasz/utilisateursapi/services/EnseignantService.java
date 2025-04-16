@@ -36,14 +36,14 @@ public class EnseignantService {
                 .collect(Collectors.toList());
     }
 
-    public EnseignantDTO obtenirEnseignantParId(int id) {
+    public EnseignantDTO obtenirEnseignantParId(Long id) {
         log.info("Récupération de l'enseignant avec ID: {}", id);
         return enseignantRepository.findById(id)
                 .map(enseignantMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Enseignant non trouvé"));
     }
 
-    public EnseignantDTO modifierEnseignant(int id, EnseignantDTO enseignantDTO) {
+    public EnseignantDTO modifierEnseignant(Long id, EnseignantDTO enseignantDTO) {
         log.info("Modification de l'enseignant avec ID: {}", id);
         Enseignant existingEnseignant = enseignantRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Enseignant non trouvé"));
@@ -53,7 +53,7 @@ public class EnseignantService {
         return enseignantMapper.toDTO(updatedEnseignant);
     }
 
-    public void supprimerEnseignant(int id) {
+    public void supprimerEnseignant(Long id) {
         log.info("Suppression de l'enseignant avec ID: {}", id);
         enseignantRepository.deleteById(id);
     }
