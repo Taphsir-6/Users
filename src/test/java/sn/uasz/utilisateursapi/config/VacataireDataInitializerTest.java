@@ -21,7 +21,7 @@ class VacataireDataInitializerTest {
 
     @Test
     void testCreerVacataireTest_success() {
-        boolean result = initializer.creerVacataireTest("Jean", "Dupont", "jean.dupont@univ.fr", "0600000000", "Math");
+        boolean result = initializer.creerVacataireTest("Diop", "Omar", "diop.omar@univ.fr", "0600000000", "Math");
         assertTrue(result);
         verify(vacataireService, times(1)).creerVacataire(any(VacataireDTO.class));
     }
@@ -43,7 +43,7 @@ class VacataireDataInitializerTest {
     @Test
     void testVerifierCreationVacataires_partialFailure() {
         doThrow(new RuntimeException("Erreur simulée")).when(vacataireService)
-                .creerVacataire(argThat(dto -> "Pierre".equals(dto.getPrenom())));
+                .creerVacataire(argThat(dto -> "Babacar".equals(dto.getPrenom())));
         boolean result = initializer.verifierCreationVacataires();
         assertFalse(result);
     }
