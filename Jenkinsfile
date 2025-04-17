@@ -5,6 +5,10 @@ pipeline {
             maven 'M3' // Correspond au nom configuré dans Global Tool Configuration
             jdk 'jdk11' // Si vous utilisez Java
      }
+     environment {
+             LC_ALL = 'en_US.UTF-8'
+             DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials')
+         }
 
      stages {
             stage('Checkout') {
@@ -16,6 +20,7 @@ pipeline {
         // Étape 2 : Build avec Maven
         stage('Build') {
             steps {
+                sh 'mvn --version'
                 sh 'mvn clean package'  // Compile et package le projet
             }
         }
