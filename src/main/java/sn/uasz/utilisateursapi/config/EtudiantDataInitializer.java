@@ -1,5 +1,6 @@
 package sn.uasz.utilisateursapi.config;
 
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -7,10 +8,11 @@ import org.springframework.context.annotation.Configuration;
 import sn.uasz.utilisateursapi.dtos.EtudiantDTO;
 import sn.uasz.utilisateursapi.services.EtudiantService;
 
+
 @Configuration
 @RequiredArgsConstructor
 public class EtudiantDataInitializer {
-    
+
     private final EtudiantService etudiantService;
 
     @Bean
