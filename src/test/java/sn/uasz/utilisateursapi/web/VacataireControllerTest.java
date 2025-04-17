@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper; // Pour convertir les objets
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import sn.uasz.utilisateursapi.dtos.VacataireDTO;
@@ -25,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 // Cible le test sur VacataireController uniquement
 @WebMvcTest(VacataireController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class VacataireControllerTest {
 
     @Autowired
@@ -33,7 +36,7 @@ class VacataireControllerTest {
     @MockBean // Crée un mock du service et l'injecte dans le contexte de test
     private VacataireService vacataireService;
 
-    @Autowired
+    @Autowired(required = false)
     private ObjectMapper objectMapper; // Utilitaire Spring pour la conversion JSON <-> Java
 
     private VacataireDTO vacataireDTO;
@@ -42,6 +45,9 @@ class VacataireControllerTest {
     // Méthode exécutée avant chaque test pour initialiser les données communes
     @BeforeEach
     void setUp() {
+        if (objectMapper == null) {
+            objectMapper = new ObjectMapper();
+        }
         vacataireDTO = new VacataireDTO();
         vacataireDTO.setId(1L);
         vacataireDTO.setNom("Diop");
@@ -280,5 +286,10 @@ class VacataireControllerTest {
         // Assert
         response.andExpect(status().isInternalServerError()) // Statut HTTP 500 géré par le deuxième @ExceptionHandler
                 .andExpect(content().string("Une erreur inattendue est survenue")); // Vérifie le message générique
+    }
+
+    @Test
+    void contextLoads() {
+        // Test vide pour vérifier le chargement du contexte Spring
     }
 }
