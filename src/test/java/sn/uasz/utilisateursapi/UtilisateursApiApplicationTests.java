@@ -8,6 +8,6 @@ class UtilisateursApiApplicationTests {
 
 	@Test
 	void contextLoads() {
-		// Juste pour tester le chargement du contexte Spring Boot
 	}
+
 }
