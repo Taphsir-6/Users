@@ -2,8 +2,8 @@ pipeline {
     agent any  // Exécute sur n'importe quel nœud Jenkins
 
      tools {
-            maven 'M3' // Correspond au nom configuré dans Global Tool Configuration
-            jdk 'jdk11' // Si vous utilisez Java
+            maven 'Maven-3.9.9' // Correspond au nom configuré ci-dessus
+            jdk 'jdk17' // Si vous utilisez Java
      }
      environment {
              LC_ALL = 'en_US.UTF-8'
