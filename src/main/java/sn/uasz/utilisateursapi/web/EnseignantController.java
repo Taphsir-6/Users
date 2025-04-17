@@ -12,7 +12,7 @@ import sn.uasz.utilisateursapi.services.EnseignantService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/enseignants")
+@RequestMapping("/enseignants")
 @RequiredArgsConstructor
 @Tag(name = "Enseignants", description = "Gestion des enseignants de l'université")
 public class EnseignantController {

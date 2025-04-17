@@ -25,8 +25,8 @@ public class Enseignant {
     private String prenom;
 
     /** Adresse email professionnelle de l'enseignant */
+    @Column(unique = true)
     private String email;
-
     /** Numéro de téléphone de l'enseignant */
     private String telephone;
 
