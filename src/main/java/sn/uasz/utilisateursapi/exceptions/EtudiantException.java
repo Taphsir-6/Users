@@ -2,6 +2,7 @@ package sn.uasz.utilisateursapi.exceptions;
 
 
 
+
 public class EtudiantException extends RuntimeException {
     public EtudiantException(String message) {
         super(message);
