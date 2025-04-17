@@ -1,13 +1,17 @@
 pipeline {
     agent any  // Exécute sur n'importe quel nœud Jenkins
 
-    stages {
-        // Étape 1 : Récupérer le code depuis GitHub
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/Taphsir-6/Users.git'
+     tools {
+            maven 'M3' // Correspond au nom configuré dans Global Tool Configuration
+            jdk 'jdk11' // Si vous utilisez Java
+     }
+
+     stages {
+            stage('Checkout') {
+                steps {
+                    checkout scm // Supprimez le double checkout
+                }
             }
-        }
 
         // Étape 2 : Build avec Maven
         stage('Build') {
@@ -36,6 +40,7 @@ pipeline {
                 // sh 'scp target/*.jar user@server:/path/'
             }
         }
+
     }
 
     // Actions post-build
