@@ -38,11 +38,11 @@ public class VacataireDataInitializer implements CommandLineRunner {
 
     public boolean verifierCreationVacataires() {
         boolean success = true;
-        success &= creerVacataireTest("Diop", "Omar", "diop.omar@univ-avignon.fr", "+33612345678", "Mathématiques");
-        success &= creerVacataireTest("Diop", "Ibrahima", "diop.ibrahima@univ-avignon.fr", "+33623456789", "Français");
-        success &= creerVacataireTest("Ndao", "Babacar", "ndao.babacar@univ-avignon.fr", "+33634567890", "Histoire");
-        success &= creerVacataireTest("Cisse", "Moussa", "cisse.moussa@univ-avignon.fr", "+33645678901", "Anglais");
-        success &= creerVacataireTest("Thiogane", "Koumba", "thiogane.koumba@univ-avignon.fr", "+33656789012", "Physique");
+        success &= creerVacataireTest("Dupont", "Jean", "jean.dupont@univ-avignon.fr", "+33612345678", "Mathématiques");
+        success &= creerVacataireTest("Martin", "Marie", "marie.martin@univ-avignon.fr", "+33623456789", "Français");
+        success &= creerVacataireTest("Leroy", "Pierre", "pierre.leroy@univ-avignon.fr", "+33634567890", "Histoire");
+        success &= creerVacataireTest("Dubois", "Sophie", "sophie.dubois@univ-avignon.fr", "+33645678901", "Anglais");
+        success &= creerVacataireTest("Moreau", "Thomas", "thomas.moreau@univ-avignon.fr", "+33656789012", "Physique");
 
         if (success) {
             logger.info("\n=== 5 vacataires ont été ajoutés avec succès ===\n");
