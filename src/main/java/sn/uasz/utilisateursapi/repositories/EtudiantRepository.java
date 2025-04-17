@@ -1,7 +1,8 @@
-package sn.uasz.UtilisateursAPI.repositories;
+package sn.uasz.utilisateursapi.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import sn.uasz.UtilisateursAPI.entities.Etudiant;
+import sn.uasz.utilisateursapi.entities.Etudiant;
+
 
 public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
     Etudiant findByNom(String nom);

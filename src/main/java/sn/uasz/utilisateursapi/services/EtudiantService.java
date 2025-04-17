@@ -1,4 +1,5 @@
-package sn.uasz.UtilisateursAPI.services;
+package sn.uasz.utilisateursapi.services;
+
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -6,10 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import sn.uasz.UtilisateursAPI.dtos.EtudiantDTO;
-import sn.uasz.UtilisateursAPI.entities.Etudiant;
-import sn.uasz.UtilisateursAPI.mappers.EtudiantMapper;
-import sn.uasz.UtilisateursAPI.repositories.EtudiantRepository;
+import sn.uasz.utilisateursapi.dtos.EtudiantDTO;
+import sn.uasz.utilisateursapi.entities.Etudiant;
+import sn.uasz.utilisateursapi.mappers.EtudiantMapper;
+import sn.uasz.utilisateursapi.repositories.EtudiantRepository;
+
 
 import java.util.Date;
 import java.util.List;

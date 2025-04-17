@@ -1,4 +1,5 @@
-package sn.uasz.UtilisateursAPI.web;
+package sn.uasz.utilisateursapi.web;
+
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -10,8 +11,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import sn.uasz.UtilisateursAPI.dtos.EtudiantDTO;
-import sn.uasz.UtilisateursAPI.services.EtudiantService;
+import sn.uasz.utilisateursapi.dtos.EtudiantDTO;
+import sn.uasz.utilisateursapi.services.EtudiantService;
+
 
 import java.util.List;
 import java.util.Map;

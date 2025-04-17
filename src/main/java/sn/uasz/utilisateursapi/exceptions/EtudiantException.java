@@ -1,4 +1,5 @@
-package sn.uasz.UtilisateursAPI.exceptions;
+package sn.uasz.utilisateursapi.exceptions;
+
 
 
 

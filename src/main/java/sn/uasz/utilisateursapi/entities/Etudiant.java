@@ -1,4 +1,4 @@
-package sn.uasz.UtilisateursAPI.entities;
+package sn.uasz.utilisateursapi.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,8 +1,9 @@
-package sn.uasz.UtilisateursAPI.mappers;
+package sn.uasz.utilisateursapi.mappers;
 
 import org.springframework.stereotype.Component;
-import sn.uasz.UtilisateursAPI.dtos.EtudiantDTO;
-import sn.uasz.UtilisateursAPI.entities.Etudiant;
+import sn.uasz.utilisateursapi.dtos.EtudiantDTO;
+import sn.uasz.utilisateursapi.entities.Etudiant;
+
 
 @Component
 public class EtudiantMapper {
