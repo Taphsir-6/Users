@@ -1,27 +1,20 @@
 pipeline {
     agent any
+
     tools {
-        maven 'MAVEN-3.9.9'  // Nom de l'installation Maven
-        docker 'docker-windows'
+        maven 'Maven-3.9.9'
+        dockerTool 'docker-windows'
     }
+
     stages {
-        stage('Build JAR') {
+        stage('Build') {
             steps {
-                bat 'mvn clean package'
+                sh 'mvn clean install'
             }
         }
-        stage('Build Docker Image') {
+        stage('Docker Version') {
             steps {
-                script {
-                    docker.build("mon-app:${env.BUILD_NUMBER}", ".")
-                }
-            }
-        }
-        stage('Run Container') {
-            steps {
-                script {
-                    docker.image("mon-app:${env.BUILD_NUMBER}").run("--name mon-app -p 8080:8080 -d")
-                }
+                sh 'docker --version'
             }
         }
     }
