@@ -3,7 +3,7 @@ pipeline {
 
      tools {
             maven 'Maven-3.9.9' // Correspond au nom configuré ci-dessus
-            jdk 'jdk17' // Si vous utilisez Java
+            jdk 'JDK23' // Si vous utilisez Java
      }
      environment {
              LC_ALL = 'en_US.UTF-8'
@@ -21,6 +21,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'mvn --version'
+                sh 'java -version'
                 sh 'mvn clean package'  // Compile et package le projet
             }
         }
