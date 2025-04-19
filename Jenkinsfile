@@ -1,65 +1,36 @@
-/*
-pipeline {
+pipeline{
     agent any
-    tools {
-        maven 'MAVEN-3.9.9'   // Nom de l'installation Maven dans Jenkins
-        jdk 'JDK23'           // Nom de l'installation JDK dans Jenkins
+    tools{
+        jdk 'JDK17'  
+        maven 'Maven-3.9.9'     
     }
     environment {
-        DOCKER_IMAGE = "votre-dockerhub-username/mon-app-spring:${env.BUILD_NUMBER}"
+        JAVA_HOME = tool name: 'JDK17', type: 'hudson.model.JDK'
+        PATH = "${JAVA_HOME}/bin:${env.PATH}"
     }
-    stages {
-        // Étape 1 : Récupération du code
-        stage('Checkout') {
-            steps {
-                checkout scm
+    stages{
+        stage('Build Maven'){
+            steps{
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Taphsir-6/Users']])
+                sh 'mvn clean install'
             }
         }
-
-        // Étape 2 : Build avec Maven
-        stage('Build JAR') {
-            steps {
-                bat 'mvn clean package'
-            }
-        }
-
-        // Étape 3 : Construction de l'image Docker
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    docker.build("${env.DOCKER_IMAGE}")
+        stage('Build docker image'){
+            steps{
+                script{
+                    sh 'docker build -t taphsir/devops-integration .'
                 }
             }
         }
-
-        // Étape 4 : Pousser l'image sur Docker Hub (optionnel)
-        stage('Push to Docker Hub') {
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        docker.image("${env.DOCKER_IMAGE}").push()
-                    }
+        stage('Push image to hub'){
+            steps{
+                script{
+                     withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
+                     sh'docker login -u taphsir -p ${dockerhubpwd}'
+}
+                     sh 'docker push taphsir/devops-integration'
                 }
             }
         }
-
-        // Étape 5 : Déploiement
-        stage('Deploy') {
-            steps {
-                bat """
-                    docker stop spring-app || true
-                    docker rm spring-app || true
-                    docker run -d -p 8080:8080 --name spring-app ${env.DOCKER_IMAGE}
-                """
-            }
-        }
     }
-    post {
-        success {
-            echo '✅ Pipeline réussi ! Application déployée sur http://localhost:8080'
-        }
-        failure {
-            echo '❌ Pipeline échoué. Consultez les logs.'
-        }
-    }
-} */
+}
