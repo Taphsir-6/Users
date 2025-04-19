@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import sn.uasz.UtilisateursAPI.entities.Enseignant;
 import sn.uasz.UtilisateursAPI.repositories.EnseignantRepository;
 
+
 @SpringBootApplication
 public class UtilisateursApiApplication {
 
@@ -17,6 +18,7 @@ public class UtilisateursApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(UtilisateursApiApplication.class, args);
 	}
+
 
 	@Bean
 	CommandLineRunner initDatabase() {
@@ -56,3 +58,6 @@ public class UtilisateursApiApplication {
 		};
 	}
 }
+
+
+
