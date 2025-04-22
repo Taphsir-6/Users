@@ -69,11 +69,11 @@ jobs:
         run: mvn test
 
       - name: Build Docker image (for test)
-        run: docker build -t utilisateurs-api .
+        run: docker build -t utilisateurs-api_1 .
 
       - name: Run Docker container (simulation)
         run: |
-          docker run -d -p 8080:8080 --name test-api utilisateurs-api
+          docker run -d -p 8080:8080 --name test-api utilisateurs-api_1
           sleep 10
           curl --fail http://localhost:8080/api/vacataires
           docker stop test-api
@@ -93,7 +93,7 @@ jobs:
           path: target
 
       - name: Build Docker image
-        run: docker build -t utilisateurs-api .
+        run: docker build -t utilisateurs-api_1 .
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -102,10 +102,10 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Tag Docker image
-        run: docker tag utilisateurs-api ${{ secrets.DOCKER_USERNAME }}/utilisateurs-api:latest
+        run: docker tag utilisateurs-api_1 ${{ secrets.DOCKER_USERNAME }}/utilisateurs-api_1:latest
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/utilisateurs-api:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/utilisateurs-api_1:latest
 
       - name: Deploy to server via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -114,7 +114,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            docker pull omardiop10/utilisateurs-api:latest
+            docker pull omardiop10/utilisateurs-api_1:latest
             docker stop test-api || true
             docker rm test-api || true
-            docker run -d -p 8080:8080 --name test-api omardiop10/utilisateurs-api:latest
+            docker run -d -p 8080:8080 --name test-api omardiop10/utilisateurs-api_1:latest
