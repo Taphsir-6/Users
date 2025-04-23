@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sn.uasz.utilisateursapi.dtos.EnseignantDTO;
+import sn.uasz.utilisateursapi.exceptions.EnseignantNotFoundException;
 import sn.uasz.utilisateursapi.services.EnseignantService;
 
 import java.util.List;
@@ -80,4 +81,27 @@ public class EnseignantController {
         List<EnseignantDTO> resultats = enseignantService.rechercherEnseignantsParNom(nom);
         return ResponseEntity.ok(resultats);
     }
+    @PutMapping("/{id}/activer")
+    public ResponseEntity<EnseignantDTO> activerEnseignant(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(enseignantService.activerEnseignant(id));
+        } catch (EnseignantNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PutMapping("/{id}/desactiver")
+    public ResponseEntity<EnseignantDTO> desactiverEnseignant(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(enseignantService.desactiverEnseignant(id));
+        } catch (EnseignantNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+
+
+
+
+
 }

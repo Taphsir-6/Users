@@ -58,7 +58,7 @@ public class EtudiantService {
         etudiant.setMatricule(etudiantDTO.getMatricule());
         etudiant.setEmail(etudiantDTO.getEmail());
         etudiant.setPhoto(etudiantDTO.getPhoto());
-        // On ne modifie pas createat et createby
+        // On ne modifie pas createAt et createby
 
         // Détacher l'entité pour éviter les problèmes de transaction
         entityManager.detach(etudiant);

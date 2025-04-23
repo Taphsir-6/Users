@@ -1,6 +1,8 @@
 package sn.uasz.utilisateursapi.dtos;
 
 import jakarta.validation.constraints.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record EnseignantDTO(
@@ -25,7 +27,8 @@ public record EnseignantDTO(
         String grade,
 
         String createBy,
-        LocalDateTime createAt
+        LocalDate createAt,
+         Boolean actif
 ) {
     public String nomComplet() {
         return prenom + " " + nom;

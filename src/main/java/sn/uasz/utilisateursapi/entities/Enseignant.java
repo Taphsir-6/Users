@@ -3,6 +3,8 @@ package sn.uasz.utilisateursapi.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 /**
  * Représente un enseignant dans le système.
  * Cette classe contient toutes les informations personnelles et professionnelles
@@ -37,8 +39,20 @@ public class Enseignant {
     private String grade;
 
     /** Utilisateur ayant créé l'enregistrement */
-    private String createby;
+    private String createBy;
 
     /** Date de création de l'enregistrement */
-    private String createat;
+    private LocalDate createAt;
+    @Builder.Default
+    private boolean actif = true;
+
+
+    // Getters/Setters
+    public boolean isActif() {
+        return actif;
+    }
+
+    public void setActif(boolean actif) {
+        this.actif = actif;
+    }
 }
