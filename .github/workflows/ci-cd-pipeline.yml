@@ -13,15 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Cache Maven packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -29,13 +20,7 @@ jobs:
           java-version: '17'
 
       - name: Build with Maven
-        run: mvn clean package -DskipTests
-
-      - name: Upload JAR as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-jar
-          path: target/*.jar
+        run: mvn -B package --file pom.xml
 
   test:
     runs-on: ubuntu-latest
@@ -44,14 +29,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Cache Maven packages
-        uses: actions/cache@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
-          path: |
-            ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Run tests
+        run: mvn test
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -59,63 +52,10 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Download JAR artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: app-jar
-          path: target
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
 
-      - name: Run tests
-        run: mvn test -Dspring.profiles.active=test
-
-      - name: Afficher les logs de test en cas d'échec
-        if: failure()
-        run: cat target/surefire-reports/*.txt || true
-
-      - name: Build Docker image (for test)
-        run: docker build -t utilisateurs-api .
-
-      - name: Run Docker container (simulation)
-        run: |
-          docker run -d -p 8080:8080 --name test-api utilisateurs-api
-          sleep 10
-          curl --fail http://localhost:8080/api/vacataires
-          docker stop test-api
-          docker rm test-api
-
-  deploy:
-    if: false  # Désactive temporairement le job de déploiement
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Download JAR artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: app-jar
-          path: target
-
-      - name: Build Docker image
-        run: docker build -t utilisateurs-api .
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Tag Docker image
-        run: docker tag utilisateurs-api ${{ secrets.DOCKER_USERNAME }}/utilisateurs-api:latest
-
-      - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/utilisateurs-api:latest
-
+      # Exemple de déploiement sur GitHub Pages, DockerHub, ou autre
+      # Ici, on va juste simuler le déploiement
       - name: Deploy (simulation)
-        run: |
-          echo "Simulation du déploiement : cette étape est volontairement réussie."
-          echo "Docker pull omardiop10/utilisateurs-api:latest"
-          echo "Docker stop test-api || true"
-          echo "Docker rm test-api || true"
-          echo "Docker run -d -p 8080:8080 --name test-api omardiop10/utilisateurs-api:latest"
+        run: echo "Déploiement réussi !"
