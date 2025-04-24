@@ -1,22 +1,25 @@
 package sn.uasz.utilisateursapi.services;
 
-
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sn.uasz.utilisateursapi.dtos.EnseignantDTO;
 import sn.uasz.utilisateursapi.entities.Enseignant;
+import sn.uasz.utilisateursapi.exceptions.ConflitEtatException;
+import sn.uasz.utilisateursapi.exceptions.EnseignantNotFoundException;
 import sn.uasz.utilisateursapi.mappers.EnseignantMapper;
 import sn.uasz.utilisateursapi.repositories.EnseignantRepository;
+import sn.uasz.utilisateursapi.services.EnseignantService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@Transactional
+@AllArgsConstructor
 @Slf4j
-public class EnseignantService {
+public class EnseignantService  {
 
     private final EnseignantRepository enseignantRepository;
     private final EnseignantMapper enseignantMapper;
@@ -64,5 +67,42 @@ public class EnseignantService {
                 .stream()
                 .map(enseignantMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public EnseignantDTO activerEnseignant(Long id) throws EnseignantNotFoundException {
+        Enseignant enseignant = enseignantRepository.findById(id)
+                .orElseThrow(() -> new EnseignantNotFoundException("Enseignant non trouvé"));
+
+        if (enseignant.isActif()) {
+            throw new ConflitEtatException("L'enseignant est déjà actif");
+        }
+
+        enseignant.setActif(true);
+        return enseignantMapper.toDTO(enseignantRepository.save(enseignant));
+    }
+
+    public EnseignantDTO desactiverEnseignant(Long id) throws EnseignantNotFoundException {
+        Enseignant enseignant = enseignantRepository.findById(id)
+                .orElseThrow(() -> new EnseignantNotFoundException("Enseignant non trouvé"));
+
+        if (!enseignant.isActif()) {
+            throw new ConflitEtatException("L'enseignant est déjà inactif");
+        }
+
+        enseignant.setActif(false);
+        return enseignantMapper.toDTO(enseignantRepository.save(enseignant));
+    }
+
+    public List<EnseignantDTO> findAllEnseignants() {
+        return enseignantRepository.findAll()
+                .stream()
+                .map(enseignantMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public EnseignantDTO findEnseignantById(Long id) throws EnseignantNotFoundException {
+        return enseignantRepository.findById(id)
+                .map(enseignantMapper::toDTO)
+                .orElseThrow(() -> new EnseignantNotFoundException("Enseignant non trouvé"));
     }
 }
