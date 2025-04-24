@@ -9,6 +9,7 @@ import sn.uasz.utilisateursapi.dtos.EnseignantDTO;
 import sn.uasz.utilisateursapi.repositories.EnseignantRepository;
 import sn.uasz.utilisateursapi.services.EnseignantService;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Configuration
@@ -41,7 +42,8 @@ public class EnseignantDataInitializer implements CommandLineRunner {
                     matricule,
                     grade,
                     createdBy,
-                    LocalDateTime.now()
+                    LocalDate.now(),
+                    true
             );
 
             enseignantService.ajouterEnseignant(dto);
