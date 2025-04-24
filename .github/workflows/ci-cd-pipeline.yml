@@ -84,6 +84,7 @@ jobs:
           docker rm test-api
 
   deploy:
+    if: false  # Désactive temporairement le job de déploiement
     runs-on: ubuntu-latest
     needs: test
     steps:
