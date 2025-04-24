@@ -25,6 +25,22 @@ import static org.mockito.BDDMockito.given; // Style BDD pour Mockito
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Classe de test d'intégration pour {@link sn.uasz.utilisateursapi.web.VacataireController}.
+ * <p>
+ * Vérifie le bon fonctionnement de tous les endpoints REST liés à la gestion des vacataires :
+ * <ul>
+ *   <li>Création, récupération, modification, suppression</li>
+ *   <li>Désactivation et réactivation</li>
+ *   <li>Gestion des erreurs et statuts HTTP</li>
+ * </ul>
+ * Utilise {@link MockMvc} pour simuler les requêtes HTTP et {@link MockBean} pour isoler le service métier.
+ * </p>
+ * <p>
+ * Auteur : Omar DIOP
+ * Date de dernière modification : 24 avril 2025
+ * </p>
+ */
 // Cible le test sur VacataireController uniquement
 @WebMvcTest(VacataireController.class)
 @AutoConfigureMockMvc(addFilters = false)

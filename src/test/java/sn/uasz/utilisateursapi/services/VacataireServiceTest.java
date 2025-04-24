@@ -1,10 +1,21 @@
 /**
- * Classe de test pour le service VacataireService.
- * Cette classe contient les tests unitaires pour toutes les opérations de gestion des vacataires.
- * 
- * @author Omar Diop
- * @version 1.0
- * @since 2025-04-12
+ * Classe de test unitaire pour {@link sn.uasz.utilisateursapi.services.VacataireService}.
+ * <p>
+ * Cette classe couvre tous les cas d'utilisation métier liés à la gestion des vacataires :
+ * <ul>
+ *   <li>Création</li>
+ *   <li>Récupération (par ID, email, liste des actifs)</li>
+ *   <li>Mise à jour</li>
+ *   <li>Suppression</li>
+ *   <li>Désactivation et réactivation</li>
+ *   <li>Gestion des erreurs et exceptions</li>
+ * </ul>
+ * Les tests utilisent des mocks pour isoler la logique métier du service.
+ * </p>
+ * <p>
+ * Auteur : Omar DIOP
+ * Date de dernière modification : 24 avril 2025
+ * </p>
  */
 package sn.uasz.utilisateursapi.services;
 

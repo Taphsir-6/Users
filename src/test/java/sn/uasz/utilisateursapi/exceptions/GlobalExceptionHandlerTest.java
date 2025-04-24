@@ -6,10 +6,25 @@ import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Classe de test unitaire pour {@link GlobalExceptionHandler}.
+ * <p>
+ * Vérifie que le gestionnaire global des exceptions retourne les bonnes réponses HTTP
+ * pour chaque type d'exception personnalisée ou générique.
+ * </p>
+ * <p>
+ * Auteur : Omar DIOP
+ * Date de dernière modification : 24 avril 2025
+ * </p>
+ */
 class GlobalExceptionHandlerTest {
 
     private final GlobalExceptionHandler handler = new GlobalExceptionHandler();
 
+    /**
+     * Teste la gestion de l'exception {@link VacataireNotFoundException}.
+     * Vérifie que le statut HTTP et le message sont corrects.
+     */
     @Test
     void testHandleVacataireNotFoundException() {
         // Given
@@ -25,6 +40,10 @@ class GlobalExceptionHandlerTest {
         assertEquals(errorMessage, response.getBody());
     }
 
+    /**
+     * Teste la gestion de l'exception {@link DataInitializationException}.
+     * Vérifie que le statut HTTP et le message sont corrects.
+     */
     @Test
     void testHandleDataInitializationException() {
         // Given
@@ -40,6 +59,10 @@ class GlobalExceptionHandlerTest {
         assertEquals(errorMessage, response.getBody());
     }
 
+    /**
+     * Teste la gestion d'une exception générique.
+     * Vérifie que le statut HTTP est correct et que le message contient l'erreur originale.
+     */
     @Test
     void testHandleException() {
         // Given
