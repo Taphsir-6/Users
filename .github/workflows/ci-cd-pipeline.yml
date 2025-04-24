@@ -112,14 +112,10 @@ jobs:
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/utilisateurs-api:latest
 
-      - name: Deploy to server via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            docker pull omardiop10/utilisateurs-api:latest
-            docker stop test-api || true
-            docker rm test-api || true
-            docker run -d -p 8080:8080 --name test-api omardiop10/utilisateurs-api:latest
+      - name: Deploy (simulation)
+        run: |
+          echo "Simulation du déploiement : cette étape est volontairement réussie."
+          echo "Docker pull omardiop10/utilisateurs-api:latest"
+          echo "Docker stop test-api || true"
+          echo "Docker rm test-api || true"
+          echo "Docker run -d -p 8080:8080 --name test-api omardiop10/utilisateurs-api:latest"
