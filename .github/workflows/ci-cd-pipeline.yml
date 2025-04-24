@@ -66,7 +66,11 @@ jobs:
           path: target
 
       - name: Run tests
-        run: mvn test
+        run: mvn test -Dspring.profiles.active=test
+
+      - name: Afficher les logs de test en cas d'échec
+        if: failure()
+        run: cat target/surefire-reports/*.txt || true
 
       - name: Build Docker image (for test)
         run: docker build -t utilisateurs-api .
