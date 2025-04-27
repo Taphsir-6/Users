@@ -81,13 +81,13 @@ public class VacataireService {
     }
 
     /**
-     * Récupère un vacataire par son ID (actif ou inactif).
+     * Récupère un vacataire par son ID (actif uniquement).
      *
      * @param id L'identifiant du vacataire
      * @return Le DTO du vacataire trouvé ou null si non trouvé
      */
     public VacataireDTO getVacataire(@NotNull(message = "L'ID du vacataire ne peut pas être null") Long id) {
-        Optional<Vacataire> vacataireOpt = vacataireRepository.findById(id);
+        Optional<Vacataire> vacataireOpt = vacataireRepository.findByIdAndActif(id, true);
         if (!vacataireOpt.isPresent()) {
             log.warn("Vacataire non trouvé avec l'ID : {}", id);
             throw new VacataireNotFoundException("Vacataire avec l'ID " + id + " non trouvé");
