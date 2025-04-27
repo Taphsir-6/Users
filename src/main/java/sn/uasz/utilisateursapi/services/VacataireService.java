@@ -17,6 +17,7 @@ import jakarta.validation.constraints.NotNull;
 import sn.uasz.utilisateursapi.dtos.VacataireDTO;
 import sn.uasz.utilisateursapi.entities.Vacataire;
 import sn.uasz.utilisateursapi.exceptions.VacataireNotFoundException;
+import sn.uasz.utilisateursapi.mappers.VacataireMapper;
 import sn.uasz.utilisateursapi.repositories.VacataireRepository;
 
 import java.util.Date;
@@ -46,15 +47,7 @@ public class VacataireService {
      * @return L'entité Vacataire correspondante
      */
     private Vacataire convertToEntity(VacataireDTO dto) {
-        Vacataire vacataire = new Vacataire();
-        vacataire.setId(dto.getId());
-        vacataire.setNom(dto.getNom());
-        vacataire.setPrenom(dto.getPrenom());
-        vacataire.setEmail(dto.getEmail());
-        vacataire.setTelephone(dto.getTelephone());
-        vacataire.setSpecialite(dto.getSpecialite());
-        vacataire.setActif(dto.isActif());
-        return vacataire;
+        return VacataireMapper.toEntity(dto);
     }
 
     /**
@@ -64,15 +57,7 @@ public class VacataireService {
      * @return Le DTO correspondant
      */
     private VacataireDTO convertToDTO(Vacataire vacataire) {
-        VacataireDTO dto = new VacataireDTO();
-        dto.setId(vacataire.getId());
-        dto.setNom(vacataire.getNom());
-        dto.setPrenom(vacataire.getPrenom());
-        dto.setEmail(vacataire.getEmail());
-        dto.setTelephone(vacataire.getTelephone());
-        dto.setSpecialite(vacataire.getSpecialite());
-        dto.setActif(vacataire.isActif());
-        return dto;
+        return VacataireMapper.toDTO(vacataire);
     }
 
     /**
@@ -86,18 +71,23 @@ public class VacataireService {
         Vacataire vacataire = convertToEntity(vacataireDTO);
         vacataire.setDateCreation(new Date());
         vacataire.setDateModification(new Date());
-        vacataire.setActif(true); // Assure que le vacataire est actif par défaut
+        // Respecter la valeur envoyée dans le DTO (actif true ou false)
+        if (vacataireDTO != null) {
+            vacataire.setActif(vacataireDTO.isActif());
+        } else {
+            vacataire.setActif(true); // fallback sécurité
+        }
         return convertToDTO(vacataireRepository.save(vacataire));
     }
 
     /**
-     * Récupère un vacataire par son ID.
-     * 
+     * Récupère un vacataire par son ID (actif ou inactif).
+     *
      * @param id L'identifiant du vacataire
      * @return Le DTO du vacataire trouvé ou null si non trouvé
      */
     public VacataireDTO getVacataire(@NotNull(message = "L'ID du vacataire ne peut pas être null") Long id) {
-        Optional<Vacataire> vacataireOpt = vacataireRepository.findByIdAndActif(id, true);
+        Optional<Vacataire> vacataireOpt = vacataireRepository.findById(id);
         if (!vacataireOpt.isPresent()) {
             log.warn("Vacataire non trouvé avec l'ID : {}", id);
             throw new VacataireNotFoundException("Vacataire avec l'ID " + id + " non trouvé");
@@ -140,6 +130,17 @@ public class VacataireService {
                 .stream()
                 .map(this::convertToDTO)
                 .toList();
+    }
+
+    /**
+     * Récupère la liste de tous les vacataires (actifs et inactifs).
+     * @return La liste des vacataires
+     */
+    public List<VacataireDTO> getAllVacataires() {
+        return vacataireRepository.findAll()
+            .stream()
+            .map(this::convertToDTO)
+            .toList();
     }
 
     /**
