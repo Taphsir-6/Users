@@ -1,9 +1,9 @@
 package sn.uasz.utilisateursapi.dtos;
 
 import jakarta.validation.constraints.*;
+import sn.uasz.utilisateursapi.enums.Grade;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public record EnseignantDTO(
         Long id,
@@ -23,12 +23,12 @@ public record EnseignantDTO(
         @NotBlank
         String matricule,
 
-        @NotBlank
-        String grade,
+        @NotNull
+        Grade grade,
 
         String createBy,
         LocalDate createAt,
-         Boolean actif
+        Boolean actif
 ) {
     public String nomComplet() {
         return prenom + " " + nom;

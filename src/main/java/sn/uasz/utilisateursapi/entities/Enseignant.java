@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import sn.uasz.utilisateursapi.enums.Grade;
 
 /**
  * Représente un enseignant dans le système.
@@ -36,7 +37,8 @@ public class Enseignant {
     private String matricule;
 
     /** Grade académique de l'enseignant (ex: Professeur, Maître de conférences, etc.) */
-    private String grade;
+    @Enumerated(EnumType.STRING)
+    private Grade grade;
 
     /** Utilisateur ayant créé l'enregistrement */
     private String createBy;
