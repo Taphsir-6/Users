@@ -155,6 +155,20 @@ public class VacataireController {
     }
 
     /**
+     * Récupère tous les vacataires (actifs et inactifs).
+     * @return La liste des vacataires
+     */
+    @Operation(summary = "Lister tous les vacataires (actifs et inactifs)")
+    @ApiResponse(responseCode = "200", description = "Liste de tous les vacataires",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = VacataireDTO.class)))
+    @GetMapping("/all")
+    public ResponseEntity<List<VacataireDTO>> getAllVacataires() {
+        List<VacataireDTO> vacataires = vacataireService.getAllVacataires();
+        return new ResponseEntity<>(vacataires, HttpStatus.OK);
+    }
+
+    /**
      * Désactive un vacataire.
      * 
      * @param id L'identifiant du vacataire à désactiver

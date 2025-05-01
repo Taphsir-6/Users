@@ -3,8 +3,22 @@ package sn.uasz.utilisateursapi.exceptions;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*; // Importations statiques pour les assertions
 
+/**
+ * Classe de test unitaire pour {@link DataInitializationException}.
+ * <p>
+ * Vérifie le bon fonctionnement des constructeurs de l'exception personnalisée utilisée lors de l'initialisation des données.
+ * </p>
+ * <p>
+ * Auteur : Omar DIOP
+ * Date de dernière modification : 24 avril 2025
+ * </p>
+ */
 class DataInitializationExceptionTest {
 
+    /**
+     * Teste le constructeur avec message seul.
+     * Vérifie que le message est bien transmis et que la cause est nulle.
+     */
     @Test
     void testConstructorWithMessage() {
         // Arrange: Préparer les données du test
@@ -19,6 +33,10 @@ class DataInitializationExceptionTest {
         assertNull(exception.getCause(), "La cause devrait être nulle pour ce constructeur.");
     }
 
+    /**
+     * Teste le constructeur avec message et cause.
+     * Vérifie que le message et la cause sont bien transmis.
+     */
     @Test
     void testConstructorWithMessageAndCause() {
         // Arrange

@@ -4,14 +4,24 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*; // Importe toutes les assertions statiques
 
 /**
- * Tests unitaires pour la classe VacataireNotFoundException.
- * Couvre tous les constructeurs définis.
+ * Classe de test unitaire pour {@link VacataireNotFoundException}.
+ * <p>
+ * Vérifie le bon fonctionnement des constructeurs de l'exception personnalisée utilisée pour signaler l'absence d'un vacataire.
+ * </p>
+ * <p>
+ * Auteur : Omar DIOP
+ * Date de dernière modification : 24 avril 2025
+ * </p>
  */
 class VacataireNotFoundExceptionTest {
 
     private static final String TEST_MESSAGE = "Test message personnalisé";
     private static final String TEST_CAUSE_MESSAGE = "Cause racine de l'erreur";
 
+    /**
+     * Teste le constructeur par défaut.
+     * Vérifie que le message par défaut est utilisé et que la cause est nulle.
+     */
     @Test
     void testDefaultConstructor() {
         // Act
@@ -22,6 +32,10 @@ class VacataireNotFoundExceptionTest {
         assertNull(exception.getCause(), "La cause devrait être nulle pour le constructeur par défaut.");
     }
 
+    /**
+     * Teste le constructeur avec message seul.
+     * Vérifie que le message personnalisé est bien transmis et que la cause est nulle.
+     */
     @Test
     void testMessageConstructor() {
         // Act
@@ -32,6 +46,10 @@ class VacataireNotFoundExceptionTest {
         assertNull(exception.getCause(), "La cause devrait être nulle pour le constructeur avec message seul.");
     }
 
+    /**
+     * Teste le constructeur avec message et cause.
+     * Vérifie que le message personnalisé et la cause sont bien transmis.
+     */
     @Test
     void testMessageAndCauseConstructor() {
         // Arrange
@@ -46,7 +64,10 @@ class VacataireNotFoundExceptionTest {
         assertSame(cause, exception.getCause(), "La cause fournie devrait être conservée.");
     }
 
-    // --- Test ajouté pour couvrir le dernier constructeur ---
+    /**
+     * Teste le constructeur avec cause seule.
+     * Vérifie que le message par défaut est utilisé et que la cause est bien transmise.
+     */
     @Test
     void testCauseConstructor() {
         // Arrange
