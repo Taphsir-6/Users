@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import sn.uasz.utilisateursapi.entities.Enseignant;
 import sn.uasz.utilisateursapi.repositories.EnseignantRepository;
+import sn.uasz.utilisateursapi.enums.Grade;
 
 import java.time.LocalDate;
 
@@ -33,12 +34,11 @@ public class UtilisateursApiApplication {
 					"mane.ousmane@uasz.sn", // email
 					"+221770000001", // téléphone
 					"MAT123", // matricule
-					"Assistant", // grade
+					Grade.ASSISTANT, // ✅ enum ici
 					"admin", // createBy
 					LocalDate.now(), // createAt
 					false // actif
 			));
-
 
 			enseignantRepository.save(new Enseignant(
 					null,
@@ -47,23 +47,25 @@ public class UtilisateursApiApplication {
 					"diop.ibrahima@uasz.sn",
 					"+221770000001",
 					"INF247",
-					"Professeur",
-					"admin", // createBy
-					LocalDate.now(), // createAt
+					Grade.PROFESSEUR, // ✅ enum ici
+					"admin",
+					LocalDate.now(),
 					true
 			));
+
 			enseignantRepository.save(new Enseignant(
 					null,
 					"Diouf",
 					"Moussa",
 					"diouf.moussa@uasz.sn",
 					"+221770000001",
-					"INF247",
-					"Professeur",
-					"admin", // createBy
-					LocalDate.now(), // createAt
+					"INF248",
+					Grade.PROFESSEUR,
+					"admin",
+					LocalDate.now(),
 					true
 			));
+
 
 
 

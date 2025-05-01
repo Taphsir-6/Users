@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sn.uasz.utilisateursapi.dtos.EnseignantDTO;
 import sn.uasz.utilisateursapi.entities.Enseignant;
 import sn.uasz.utilisateursapi.exceptions.ConflitEtatException;
+import sn.uasz.utilisateursapi.exceptions.EnseignantException;
 import sn.uasz.utilisateursapi.exceptions.EnseignantNotFoundException;
 import sn.uasz.utilisateursapi.mappers.EnseignantMapper;
 import sn.uasz.utilisateursapi.repositories.EnseignantRepository;
@@ -24,12 +25,18 @@ public class EnseignantService  {
     private final EnseignantRepository enseignantRepository;
     private final EnseignantMapper enseignantMapper;
 
-    public EnseignantDTO ajouterEnseignant(EnseignantDTO enseignantDTO) {
-        log.info("Ajout d'un nouvel enseignant: {}", enseignantDTO);
-        Enseignant enseignant = enseignantMapper.toEntity(enseignantDTO);
-        Enseignant savedEnseignant = enseignantRepository.save(enseignant);
-        return enseignantMapper.toDTO(savedEnseignant);
+public EnseignantDTO ajouterEnseignant(EnseignantDTO enseignantDTO) {
+    log.info("Ajout d'un nouvel enseignant: {}", enseignantDTO);
+
+    if (enseignantRepository.existsByEmail(enseignantDTO.email())) {
+        throw new EnseignantException("Email déjà utilisé : " + enseignantDTO.email());
     }
+
+    Enseignant enseignant = enseignantMapper.toEntity(enseignantDTO);
+    Enseignant savedEnseignant = enseignantRepository.save(enseignant);
+    return enseignantMapper.toDTO(savedEnseignant);
+}
+
 
     public List<EnseignantDTO> listerTousEnseignants() {
         log.info("Récupération de tous les enseignants");
