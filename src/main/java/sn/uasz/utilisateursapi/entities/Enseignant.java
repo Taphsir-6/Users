@@ -57,4 +57,8 @@ public class Enseignant {
     public void setActif(boolean actif) {
         this.actif = actif;
     }
+
+    public boolean getActif() {
+        return false;
+    }
 }

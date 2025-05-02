@@ -1,6 +1,7 @@
 package sn.uasz.utilisateursapi.enums;
 
 public enum Grade {
+    PROFESSEUR_TITULAIRE,
     PROFESSEUR,
     PROFESSEUR_ASSIMILE,
     VACATAIRE,
