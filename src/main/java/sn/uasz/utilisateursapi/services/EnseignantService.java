@@ -14,7 +14,6 @@ import sn.uasz.utilisateursapi.repositories.EnseignantRepository;
 import sn.uasz.utilisateursapi.services.EnseignantService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -22,41 +21,42 @@ import java.util.stream.Collectors;
 @Slf4j
 public class EnseignantService  {
 
+    private static final String ENSEIGNANT_NOT_FOUND_MSG = "Enseignant non trouvé";
+
     private final EnseignantRepository enseignantRepository;
     private final EnseignantMapper enseignantMapper;
 
-public EnseignantDTO ajouterEnseignant(EnseignantDTO enseignantDTO) {
-    log.info("Ajout d'un nouvel enseignant: {}", enseignantDTO);
+    public EnseignantDTO ajouterEnseignant(EnseignantDTO enseignantDTO) {
+        log.info("Ajout d'un nouvel enseignant: {}", enseignantDTO);
 
-    if (enseignantRepository.existsByEmail(enseignantDTO.email())) {
-        throw new EnseignantException("Email déjà utilisé : " + enseignantDTO.email());
+        if (enseignantRepository.existsByEmail(enseignantDTO.email())) {
+            throw new EnseignantException("Email déjà utilisé : " + enseignantDTO.email());
+        }
+
+        Enseignant enseignant = enseignantMapper.toEntity(enseignantDTO);
+        Enseignant savedEnseignant = enseignantRepository.save(enseignant);
+        return enseignantMapper.toDTO(savedEnseignant);
     }
-
-    Enseignant enseignant = enseignantMapper.toEntity(enseignantDTO);
-    Enseignant savedEnseignant = enseignantRepository.save(enseignant);
-    return enseignantMapper.toDTO(savedEnseignant);
-}
-
 
     public List<EnseignantDTO> listerTousEnseignants() {
         log.info("Récupération de tous les enseignants");
         return enseignantRepository.findAll()
                 .stream()
                 .map(enseignantMapper::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public EnseignantDTO obtenirEnseignantParId(Long id) {
         log.info("Récupération de l'enseignant avec ID: {}", id);
         return enseignantRepository.findById(id)
                 .map(enseignantMapper::toDTO)
-                .orElseThrow(() -> new RuntimeException("Enseignant non trouvé"));
+                .orElseThrow(() -> new RuntimeException(ENSEIGNANT_NOT_FOUND_MSG));
     }
 
     public EnseignantDTO modifierEnseignant(Long id, EnseignantDTO enseignantDTO) {
         log.info("Modification de l'enseignant avec ID: {}", id);
         Enseignant existingEnseignant = enseignantRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Enseignant non trouvé"));
+                .orElseThrow(() -> new RuntimeException(ENSEIGNANT_NOT_FOUND_MSG));
 
         enseignantMapper.updateEnseignantFromDTO(enseignantDTO, existingEnseignant);
         Enseignant updatedEnseignant = enseignantRepository.save(existingEnseignant);
@@ -73,12 +73,12 @@ public EnseignantDTO ajouterEnseignant(EnseignantDTO enseignantDTO) {
         return enseignantRepository.findByNomContainingIgnoreCase(nom)
                 .stream()
                 .map(enseignantMapper::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public EnseignantDTO activerEnseignant(Long id) throws EnseignantNotFoundException {
         Enseignant enseignant = enseignantRepository.findById(id)
-                .orElseThrow(() -> new EnseignantNotFoundException("Enseignant non trouvé"));
+                .orElseThrow(() -> new EnseignantNotFoundException(ENSEIGNANT_NOT_FOUND_MSG));
 
         if (enseignant.isActif()) {
             throw new ConflitEtatException("L'enseignant est déjà actif");
@@ -90,7 +90,7 @@ public EnseignantDTO ajouterEnseignant(EnseignantDTO enseignantDTO) {
 
     public EnseignantDTO desactiverEnseignant(Long id) throws EnseignantNotFoundException {
         Enseignant enseignant = enseignantRepository.findById(id)
-                .orElseThrow(() -> new EnseignantNotFoundException("Enseignant non trouvé"));
+                .orElseThrow(() -> new EnseignantNotFoundException(ENSEIGNANT_NOT_FOUND_MSG));
 
         if (!enseignant.isActif()) {
             throw new ConflitEtatException("L'enseignant est déjà inactif");
@@ -104,12 +104,12 @@ public EnseignantDTO ajouterEnseignant(EnseignantDTO enseignantDTO) {
         return enseignantRepository.findAll()
                 .stream()
                 .map(enseignantMapper::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public EnseignantDTO findEnseignantById(Long id) throws EnseignantNotFoundException {
         return enseignantRepository.findById(id)
                 .map(enseignantMapper::toDTO)
-                .orElseThrow(() -> new EnseignantNotFoundException("Enseignant non trouvé"));
+                .orElseThrow(() -> new EnseignantNotFoundException(ENSEIGNANT_NOT_FOUND_MSG));
     }
 }

@@ -17,7 +17,7 @@ public record EnseignantDTO(
         @NotBlank @Email
         String email,
 
-        @Pattern(regexp = "^\\+?[0-9]{9,15}$")
+        @Pattern(regexp = "^\\+?\\d{9,15}$")
         String telephone,
 
         @NotBlank

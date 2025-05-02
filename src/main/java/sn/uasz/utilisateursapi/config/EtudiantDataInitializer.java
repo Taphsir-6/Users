@@ -1,17 +1,19 @@
 package sn.uasz.utilisateursapi.config;
 
-
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import sn.uasz.utilisateursapi.dtos.EtudiantDTO;
 import sn.uasz.utilisateursapi.services.EtudiantService;
 
-
 @Configuration
 @RequiredArgsConstructor
 public class EtudiantDataInitializer {
+
+    private static final Logger logger = LoggerFactory.getLogger(EtudiantDataInitializer.class);
 
     private final EtudiantService etudiantService;
 
@@ -40,10 +42,10 @@ public class EtudiantDataInitializer {
 
 
 
-                System.out.println("\n=== les etudiants ont été ajoutés avec succès ===\n");
+                logger.info("\n=== les etudiants ont été ajoutés avec succès ===\n");
             } catch (Exception e) {
-                System.err.println("Erreur lors de l'initialisation des données : " + e.getMessage());
-                throw e;
+                logger.error("Erreur lors de l'initialisation des données : {}", e.getMessage(), e);
+                throw new sn.uasz.utilisateursapi.exceptions.EtudiantDataInitializationException("Échec lors de l'initialisation des étudiants", e);
             }
         };
     }
