@@ -3,7 +3,6 @@ package sn.uasz.utilisateursapi.dtos;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public record EnseignantDTO(
         Long id,

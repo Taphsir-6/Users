@@ -16,6 +16,10 @@ import sn.uasz.utilisateursapi.entities.Vacataire;
  * @author Omar DIOP
  */
 public class VacataireMapper {
+    private VacataireMapper() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * Convertit une entité Vacataire en DTO VacataireDTO.
      *

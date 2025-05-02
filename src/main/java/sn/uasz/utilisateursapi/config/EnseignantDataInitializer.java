@@ -6,12 +6,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import sn.uasz.utilisateursapi.dtos.EnseignantDTO;
-import sn.uasz.utilisateursapi.entities.Enseignant;
 import sn.uasz.utilisateursapi.repositories.EnseignantRepository;
 import sn.uasz.utilisateursapi.services.EnseignantService;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Configuration
 @RequiredArgsConstructor

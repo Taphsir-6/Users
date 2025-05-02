@@ -29,11 +29,9 @@ import sn.uasz.utilisateursapi.dtos.VacataireDTO;
 import sn.uasz.utilisateursapi.entities.Vacataire;
 import sn.uasz.utilisateursapi.repositories.VacataireRepository;
 import sn.uasz.utilisateursapi.exceptions.VacataireNotFoundException;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
