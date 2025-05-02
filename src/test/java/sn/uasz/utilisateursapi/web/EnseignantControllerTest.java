@@ -22,6 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import sn.uasz.utilisateursapi.enums.Grade;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -47,7 +48,7 @@ class EnseignantControllerTest {
             "moussa.fall@uasz.sn",
             "770000000",
             "MAT123",
-            "MCF",
+            Grade.PROFESSEUR,
             "admin",
             LocalDate.now(),
             true
