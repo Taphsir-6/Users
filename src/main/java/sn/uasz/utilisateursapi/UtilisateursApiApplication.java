@@ -21,56 +21,6 @@ public class UtilisateursApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(UtilisateursApiApplication.class, args);
 	}
-
-
-	@Bean
-	CommandLineRunner initDatabase() {
-		return args -> {
-			// Insertion d'enseignants au démarrage
-			enseignantRepository.save(new Enseignant(
-					null,
-					"Mané", // nom
-					"Ousmane", // prénom
-					"mane.ousmane@uasz.sn", // email
-					"+221770000001", // téléphone
-					"MAT123", // matricule
-					Grade.ASSISTANT, // ✅ enum ici
-					"admin", // createBy
-					LocalDate.now(), // createAt
-					false // actif
-			));
-
-			enseignantRepository.save(new Enseignant(
-					null,
-					"Diop",
-					"Ibrahima",
-					"diop.ibrahima@uasz.sn",
-					"+221770000001",
-					"INF247",
-					Grade.PROFESSEUR, // ✅ enum ici
-					"admin",
-					LocalDate.now(),
-					true
-			));
-
-			enseignantRepository.save(new Enseignant(
-					null,
-					"Diouf",
-					"Moussa",
-					"diouf.moussa@uasz.sn",
-					"+221770000001",
-					"INF248",
-					Grade.PROFESSEUR,
-					"admin",
-					LocalDate.now(),
-					true
-			));
-
-
-
-
-		};
-	}
 }
 
 
