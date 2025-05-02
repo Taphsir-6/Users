@@ -168,12 +168,27 @@ class EnseignantServiceTest {
         enseignant.setActif(true);
         when(enseignantRepository.findById(1L)).thenReturn(Optional.of(enseignant));
         when(enseignantRepository.save(any())).thenReturn(enseignant);
-        when(enseignantMapper.toDTO(any())).thenReturn(enseignantDTO);
+
+        EnseignantDTO enseignantDesactive = new EnseignantDTO(
+                enseignant.getId(),
+                enseignant.getNom(),
+                enseignant.getPrenom(),
+                enseignant.getEmail(),
+                enseignant.getTelephone(),
+                enseignant.getMatricule(),
+                enseignant.getGrade(),
+                enseignant.getCreateBy(),
+                enseignant.getCreateAt(),
+                false // État désactivé
+        );
+
+        when(enseignantMapper.toDTO(any())).thenReturn(enseignantDesactive);
 
         EnseignantDTO result = enseignantService.desactiverEnseignant(1L);
 
         assertFalse(result.actif());
         verify(enseignantRepository).save(any());
     }
+
 
 }
