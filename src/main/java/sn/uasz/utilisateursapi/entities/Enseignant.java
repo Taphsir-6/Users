@@ -59,6 +59,6 @@ public class Enseignant {
     }
 
     public boolean getActif() {
-        return false;
+        return actif;
     }
 }
