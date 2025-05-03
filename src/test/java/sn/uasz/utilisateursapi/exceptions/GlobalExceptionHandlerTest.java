@@ -4,78 +4,79 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Classe de test unitaire pour {@link GlobalExceptionHandler}.
- * <p>
- * Vérifie que le gestionnaire global des exceptions retourne les bonnes réponses HTTP
- * pour chaque type d'exception personnalisée ou générique.
- * </p>
- * <p>
- * Auteur : Omar DIOP
- * Date de dernière modification : 24 avril 2025
- * </p>
+ * Tests unitaires pour {@link GlobalExceptionHandler}.
+ * Vérifie les réponses HTTP structurées pour chaque exception personnalisée.
  */
 class GlobalExceptionHandlerTest {
 
     private final GlobalExceptionHandler handler = new GlobalExceptionHandler();
 
-    /**
-     * Teste la gestion de l'exception {@link VacataireNotFoundException}.
-     * Vérifie que le statut HTTP et le message sont corrects.
-     */
     @Test
-    void testHandleVacataireNotFoundException() {
-        // Given
-        String errorMessage = "Vacataire non trouvé";
-        VacataireNotFoundException exception = new VacataireNotFoundException(errorMessage);
+    void testHandleEnseignantNotFound() {
+        String msg = "Aucun enseignant avec cet ID";
+        EnseignantNotFoundException ex = new EnseignantNotFoundException(msg);
 
-        // When
-        ResponseEntity<String> response = handler.handleVacataireNotFoundException(exception);
+        ResponseEntity<Object> response = handler.handleEnseignantNotFound(ex);
 
-        // Then
-        assertNotNull(response);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertEquals(errorMessage, response.getBody());
+        assertResponseStructure(response, HttpStatus.NOT_FOUND, "Enseignant non trouvé", msg);
     }
 
-    /**
-     * Teste la gestion de l'exception {@link DataInitializationException}.
-     * Vérifie que le statut HTTP et le message sont corrects.
-     */
+    @Test
+    void testHandleVacataireNotFound() {
+        String msg = "Vacataire ID introuvable";
+        VacataireNotFoundException ex = new VacataireNotFoundException(msg);
+
+        ResponseEntity<Object> response = handler.handleVacataireNotFoundException(ex);
+
+        assertResponseStructure(response, HttpStatus.NOT_FOUND, "Vacataire non trouvé", msg);
+    }
+
     @Test
     void testHandleDataInitializationException() {
-        // Given
-        String errorMessage = "Erreur d'initialisation";
-        DataInitializationException exception = new DataInitializationException(errorMessage);
+        String msg = "Erreur au démarrage de la BD";
+        DataInitializationException ex = new DataInitializationException(msg);
 
-        // When
-        ResponseEntity<String> response = handler.handleDataInitializationException(exception);
+        ResponseEntity<Object> response = handler.handleDataInitializationException(ex);
 
-        // Then
-        assertNotNull(response);
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        assertEquals(errorMessage, response.getBody());
+        assertResponseStructure(response, HttpStatus.INTERNAL_SERVER_ERROR, "Erreur d'initialisation des données", msg);
     }
 
-    /**
-     * Teste la gestion d'une exception générique.
-     * Vérifie que le statut HTTP est correct et que le message contient l'erreur originale.
-     */
     @Test
-    void testHandleException() {
-        // Given
-        String errorMessage = "Erreur inattendue";
-        Exception exception = new Exception(errorMessage);
+    void testHandleEnseignantException() {
+        String msg = "Erreur dans les données de l'enseignant";
+        EnseignantException ex = new EnseignantException(msg);
 
-        // When
-        ResponseEntity<String> response = handler.handleException(exception);
+        ResponseEntity<Object> response = handler.handleEnseignantException(ex);
 
-        // Then
+        assertResponseStructure(response, HttpStatus.BAD_REQUEST, "Erreur liée à un enseignant", msg);
+    }
+
+    @Test
+    void testHandleGenericException() {
+        String msg = "Problème interne";
+        Exception ex = new Exception(msg);
+
+        ResponseEntity<Object> response = handler.handleException(ex);
+
+        assertResponseStructure(response, HttpStatus.INTERNAL_SERVER_ERROR, "Erreur interne",
+                "Une erreur inattendue est survenue : " + msg);
+    }
+
+    private void assertResponseStructure(ResponseEntity<Object> response, HttpStatus expectedStatus, String expectedError, String expectedMessage) {
         assertNotNull(response);
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        assertTrue(response.getBody().contains(errorMessage));
-        assertTrue(response.getBody().startsWith("Une erreur inattendue est survenue : "));
+        assertEquals(expectedStatus, response.getStatusCode());
+
+        assertInstanceOf(Map.class, response.getBody());
+        Map<String, Object> body = (Map<String, Object>) response.getBody();
+
+        assertNotNull(body.get("timestamp"));
+        assertEquals(expectedStatus.value(), body.get("status"));
+        assertEquals(expectedError, body.get("error"));
+        assertEquals(expectedMessage, body.get("message"));
     }
 }
