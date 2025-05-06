@@ -57,9 +57,7 @@ public class EtudiantService {
         etudiant.setNom(etudiantDTO.getNom());
         etudiant.setPrenom(etudiantDTO.getPrenom());
         etudiant.setMatricule(etudiantDTO.getMatricule());
-        // Générer le nouvel email basé sur le nouveau nom/prénom
-        String email = genererEmail(etudiantDTO.getNom(), etudiantDTO.getPrenom());
-        etudiant.setEmail(email);
+        etudiant.setEmail(etudiantDTO.getEmail());
         etudiant.setPhoto(etudiantDTO.getPhoto());
         // On ne modifie pas createAt et createby
 
