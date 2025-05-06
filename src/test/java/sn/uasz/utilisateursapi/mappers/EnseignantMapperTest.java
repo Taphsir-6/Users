@@ -41,7 +41,7 @@ class EnseignantMapperTest {
         assertEquals(dto.grade(), entity.getGrade());
         assertEquals(dto.createBy(), entity.getCreateBy());
         assertEquals(dto.createAt(), entity.getCreateAt());
-        assertEquals(dto.actif(), entity.getActif());
+        assertEquals(dto.actif(), entity.isActif());
     }
 
     @Test
@@ -70,7 +70,7 @@ class EnseignantMapperTest {
         assertEquals(entity.getGrade(), dto.grade());
         assertEquals(entity.getCreateBy(), dto.createBy());
         assertEquals(entity.getCreateAt(), dto.createAt());
-        assertEquals(entity.getActif(), dto.actif());
+        assertEquals(entity.isActif(), dto.actif());
     }
 
     @Test
@@ -102,6 +102,6 @@ class EnseignantMapperTest {
         assertEquals(Grade.VACATAIRE, entity.getGrade());
         assertEquals("modifieur", entity.getCreateBy());
         assertEquals(LocalDate.of(2025, 5, 1), entity.getCreateAt());
-        assertFalse(entity.getActif());
+        assertFalse(entity.isActif());
     }
 }
