@@ -44,8 +44,10 @@ public class EtudiantDataInitializer {
 
                 logger.info("\n=== les etudiants ont été ajoutés avec succès ===\n");
             } catch (Exception e) {
-                logger.error("Erreur lors de l'initialisation des données : {}", e.getMessage(), e);
-                throw new sn.uasz.utilisateursapi.exceptions.EtudiantDataInitializationException("Échec lors de l'initialisation des étudiants", e);
+                // Ne pas logger ici, uniquement relancer avec contexte
+                throw new sn.uasz.utilisateursapi.exceptions.EtudiantDataInitializationException(
+                    "Échec lors de l'initialisation des étudiants dans EtudiantDataInitializer.init()", e
+                );
             }
         };
     }

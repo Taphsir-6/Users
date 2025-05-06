@@ -11,10 +11,10 @@ import sn.uasz.utilisateursapi.exceptions.EtudiantNotFoundException;
 import sn.uasz.utilisateursapi.mappers.EtudiantMapper;
 import sn.uasz.utilisateursapi.repositories.EtudiantRepository;
 
+import java.security.SecureRandom;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 @Service
 @Validated
@@ -25,8 +25,6 @@ public class EtudiantService {
 
     @PersistenceContext
     private EntityManager entityManager;
-
-    private final Random random = new Random();
 
     public EtudiantService(EtudiantRepository etudiantRepository, EtudiantMapper etudiantMapper) {
         this.etudiantRepository = etudiantRepository;
@@ -110,11 +108,12 @@ public class EtudiantService {
     }
 
     // Méthode pour générer l'email
+    private static final SecureRandom secureRandom = new SecureRandom();
     private String genererEmail(String nom, String prenom) {
         String premiereLettrePrenom = prenom.substring(0, 1).toLowerCase();
         String premiereLettreNom = nom.substring(0, 1).toLowerCase();
-        //Générer un nombre aléatoire
-        int numeroAleatoire = random.nextInt(100);
+        // Générer un nombre aléatoire sécurisé (CSPRNG)
+        int numeroAleatoire = secureRandom.nextInt(100);
         return nom.toLowerCase() + premiereLettrePrenom + premiereLettreNom + numeroAleatoire + "@zig.univ.sn";
     }
 }
