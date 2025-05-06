@@ -109,7 +109,7 @@ public class EtudiantService {
 
     // Méthode pour générer l'email
     private static final SecureRandom secureRandom = new SecureRandom();
-    private String genererEmail(String nom, String prenom) {
+    public String genererEmail(String nom, String prenom) {
         String premiereLettrePrenom = prenom.substring(0, 1).toLowerCase();
         String premiereLettreNom = nom.substring(0, 1).toLowerCase();
         // Générer un nombre aléatoire sécurisé (CSPRNG)

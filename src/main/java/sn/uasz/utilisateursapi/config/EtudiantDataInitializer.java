@@ -51,4 +51,28 @@ public class EtudiantDataInitializer {
             }
         };
     }
+
+    public boolean ajouterEtudiantTest(String nom, String prenom, String matricule, String photo) {
+        try {
+            EtudiantDTO etudiantDTO = new EtudiantDTO();
+            etudiantDTO.setNom(nom);
+            etudiantDTO.setPrenom(prenom);
+            etudiantDTO.setMatricule(matricule);
+            etudiantDTO.setPhoto(photo);
+            etudiantService.ajouterEtudiant(etudiantDTO);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean verifierCreationEtudiant() {
+        boolean success = true;
+        success &= ajouterEtudiantTest("Dupont", "Jean", "202202898", "photo1.jpg");
+        success &= ajouterEtudiantTest("Martin", "Marie", "202202899", "photo2.jpg");
+        success &= ajouterEtudiantTest("Leroy", "Pierre", "202202900", "photo3.jpg");
+        success &= ajouterEtudiantTest("Dubois", "Sophie", "202202901", "photo4.jpg");
+        success &= ajouterEtudiantTest("Moreau", "Thomas", "202202902", "photo5.jpg");
+        return success;
+    }
 }
