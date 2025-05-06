@@ -2,7 +2,6 @@ package sn.uasz.utilisateursapi.config;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatcher;
 import sn.uasz.utilisateursapi.dtos.EnseignantDTO;
 import sn.uasz.utilisateursapi.enums.Grade;
 import sn.uasz.utilisateursapi.repositories.EnseignantRepository;

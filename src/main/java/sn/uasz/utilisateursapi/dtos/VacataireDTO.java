@@ -3,6 +3,9 @@ package sn.uasz.utilisateursapi.dtos;
 import lombok.Data;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import sn.uasz.utilisateursapi.entities.Vacataire;
+import sn.uasz.utilisateursapi.services.VacataireService;
+import sn.uasz.utilisateursapi.web.VacataireController;
 
 /**
  * Data Transfer Object (DTO) représentant un vacataire.

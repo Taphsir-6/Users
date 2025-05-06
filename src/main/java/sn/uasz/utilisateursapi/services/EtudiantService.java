@@ -1,37 +1,38 @@
 package sn.uasz.utilisateursapi.services;
 
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import sn.uasz.utilisateursapi.dtos.EtudiantDTO;
 import sn.uasz.utilisateursapi.entities.Etudiant;
+import sn.uasz.utilisateursapi.exceptions.EtudiantNotFoundException;
 import sn.uasz.utilisateursapi.mappers.EtudiantMapper;
 import sn.uasz.utilisateursapi.repositories.EtudiantRepository;
 
-
+import java.security.SecureRandom;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Validated
 public class EtudiantService {
-    @Autowired
-    private EtudiantRepository etudiantRepository;
+    private final EtudiantRepository etudiantRepository;
 
-    @Autowired
-    private EtudiantMapper etudiantMapper;
+    private final EtudiantMapper etudiantMapper;
 
     @PersistenceContext
     private EntityManager entityManager;
 
+    public EtudiantService(EtudiantRepository etudiantRepository, EtudiantMapper etudiantMapper) {
+        this.etudiantRepository = etudiantRepository;
+        this.etudiantMapper = etudiantMapper;
+    }
+
     @Transactional
-    public EtudiantDTO ajouterEtudiant(@Validated EtudiantDTO etudiantDTO) {
+    public EtudiantDTO ajouterEtudiant(EtudiantDTO etudiantDTO) {
         Etudiant etudiant = etudiantMapper.toEntity(etudiantDTO);
         // Générer l'email
         String nom = etudiant.getNom();
@@ -46,10 +47,10 @@ public class EtudiantService {
     }
 
     @Transactional
-    public EtudiantDTO modifierEtudiant(int id, @Validated EtudiantDTO etudiantDTO) {
+    public EtudiantDTO modifierEtudiant(int id, EtudiantDTO etudiantDTO) {
         Optional<Etudiant> optionalEtudiant = etudiantRepository.findById((long) id);
         if (!optionalEtudiant.isPresent()) {
-            throw new RuntimeException("Étudiant non trouvé avec l'ID : " + id);
+            throw new EtudiantNotFoundException("Étudiant non trouvé avec l'ID : " + id);
         }
 
         Etudiant etudiant = optionalEtudiant.get();
@@ -71,7 +72,7 @@ public class EtudiantService {
     public void supprimerEtudiant(int id) {
         Optional<Etudiant> optionalEtudiant = etudiantRepository.findById((long) id);
         if (!optionalEtudiant.isPresent()) {
-            throw new RuntimeException("Étudiant non trouvé avec l'ID : " + id);
+            throw new EtudiantNotFoundException("Étudiant non trouvé avec l'ID : " + id);
         }
 
         Etudiant etudiant = optionalEtudiant.get();
@@ -87,7 +88,7 @@ public class EtudiantService {
     public EtudiantDTO obtenirEtudiant(int id) {
         Optional<Etudiant> optionalEtudiant = etudiantRepository.findById((long) id);
         if (!optionalEtudiant.isPresent()) {
-            throw new RuntimeException("Étudiant non trouvé avec l'ID : " + id);
+            throw new EtudiantNotFoundException("Étudiant non trouvé avec l'ID : " + id);
         }
 
         Etudiant etudiant = optionalEtudiant.get();
@@ -103,15 +104,16 @@ public class EtudiantService {
         List<Etudiant> etudiants = etudiantRepository.findAll();
         return etudiants.stream()
                 .map(etudiantMapper::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     // Méthode pour générer l'email
-    private String genererEmail(String nom, String prenom) {
+    private static final SecureRandom secureRandom = new SecureRandom();
+    public String genererEmail(String nom, String prenom) {
         String premiereLettrePrenom = prenom.substring(0, 1).toLowerCase();
         String premiereLettreNom = nom.substring(0, 1).toLowerCase();
-        //Générer un nombre aléatoire
-        int numeroAleatoire = (int) (Math.random() * 100);
+        // Générer un nombre aléatoire sécurisé (CSPRNG)
+        int numeroAleatoire = secureRandom.nextInt(100);
         return nom.toLowerCase() + premiereLettrePrenom + premiereLettreNom + numeroAleatoire + "@zig.univ.sn";
     }
 }

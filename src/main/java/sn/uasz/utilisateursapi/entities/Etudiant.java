@@ -23,5 +23,4 @@ public class Etudiant {
     private String photo; // Ajout de l'attribut photo
     private String createby;
     private String createat;
-
 }
