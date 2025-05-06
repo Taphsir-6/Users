@@ -11,6 +11,11 @@ import sn.uasz.utilisateursapi.services.EnseignantService;
 
 import java.util.List;
 
+/**
+ * Contrôleur REST pour la gestion des enseignants.
+ * Expose des endpoints permettant d'ajouter, modifier, supprimer, rechercher,
+ * activer/désactiver des enseignants.
+ */
 @RestController
 @RequestMapping("/api/enseignants")
 @RequiredArgsConstructor
@@ -20,7 +25,9 @@ public class EnseignantController {
     private final EnseignantService enseignantService;
 
     /**
-     * Ajouter un nouvel enseignant
+     * Ajouter un nouvel enseignant.
+     * @param enseignantDTO données de l'enseignant à ajouter.
+     * @return l'enseignant ajouté avec son ID.
      */
     @Operation(summary = "Ajouter un nouvel enseignant")
     @PostMapping
@@ -30,7 +37,8 @@ public class EnseignantController {
     }
 
     /**
-     * Récupérer tous les enseignants
+     * Récupérer la liste de tous les enseignants.
+     * @return liste des enseignants.
      */
     @Operation(summary = "Lister tous les enseignants")
     @GetMapping
@@ -40,7 +48,9 @@ public class EnseignantController {
     }
 
     /**
-     * Récupérer un enseignant par son ID
+     * Récupérer un enseignant par son identifiant.
+     * @param id identifiant de l'enseignant.
+     * @return l'enseignant correspondant.
      */
     @Operation(summary = "Récupérer un enseignant par son ID")
     @GetMapping("/{id}")
@@ -50,7 +60,10 @@ public class EnseignantController {
     }
 
     /**
-     * Modifier un enseignant existant
+     * Modifier les données d'un enseignant.
+     * @param id identifiant de l'enseignant à modifier.
+     * @param enseignantDTO nouvelles données.
+     * @return enseignant modifié.
      */
     @Operation(summary = "Modifier un enseignant existant")
     @PutMapping("/{id}")
@@ -62,7 +75,9 @@ public class EnseignantController {
     }
 
     /**
-     * Supprimer un enseignant
+     * Supprimer un enseignant par son ID.
+     * @param id identifiant de l'enseignant.
+     * @return réponse HTTP sans contenu.
      */
     @Operation(summary = "Supprimer un enseignant")
     @DeleteMapping("/{id}")
@@ -72,7 +87,9 @@ public class EnseignantController {
     }
 
     /**
-     * Rechercher des enseignants par nom
+     * Rechercher des enseignants dont le nom contient une chaîne donnée.
+     * @param nom chaîne de caractères à rechercher.
+     * @return liste filtrée d'enseignants.
      */
     @Operation(summary = "Rechercher des enseignants par nom")
     @GetMapping("/recherche")
@@ -80,6 +97,13 @@ public class EnseignantController {
         List<EnseignantDTO> resultats = enseignantService.rechercherEnseignantsParNom(nom);
         return ResponseEntity.ok(resultats);
     }
+
+    /**
+     * Activer un enseignant (changement d'état actif=true).
+     * @param id identifiant de l'enseignant.
+     * @return enseignant activé.
+     */
+    @Operation(summary = "Activer un enseignant")
     @PutMapping("/{id}/activer")
     public ResponseEntity<EnseignantDTO> activerEnseignant(@PathVariable Long id) {
         try {
@@ -89,6 +113,12 @@ public class EnseignantController {
         }
     }
 
+    /**
+     * Désactiver un enseignant (changement d'état actif=false).
+     * @param id identifiant de l'enseignant.
+     * @return enseignant désactivé.
+     */
+    @Operation(summary = "Désactiver un enseignant")
     @PutMapping("/{id}/desactiver")
     public ResponseEntity<EnseignantDTO> desactiverEnseignant(@PathVariable Long id) {
         try {

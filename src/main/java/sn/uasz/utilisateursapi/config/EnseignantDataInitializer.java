@@ -12,21 +12,49 @@ import sn.uasz.utilisateursapi.enums.Grade;
 
 import java.time.LocalDate;
 
+/**
+ * Composant Spring responsable de l'initialisation des données d'enseignants lors du démarrage de l'application.
+ *
+ * Cette classe implémente {@link CommandLineRunner}, ce qui permet d'exécuter du code au démarrage de l'application.
+ * Elle insère des enseignants de test si leurs adresses email ne sont pas déjà présentes dans la base de données.
+ */
 @Configuration
 @RequiredArgsConstructor
 public class EnseignantDataInitializer implements CommandLineRunner {
 
+    /** Logger pour journaliser les opérations d'initialisation. */
     private static final Logger logger = LoggerFactory.getLogger(EnseignantDataInitializer.class);
     private static final String ADMIN_USER = "admin";
 
+    /** Service métier pour la gestion des enseignants. */
     private final EnseignantService enseignantService;
+
+    /** Repository direct d'accès aux enseignants. */
     private final EnseignantRepository enseignantRepository;
 
+    /**
+     * Méthode exécutée automatiquement au démarrage de l'application.
+     * Elle appelle la méthode interne pour insérer les enseignants de test.
+     *
+     * @param args arguments de la ligne de commande (non utilisés ici)
+     */
     @Override
     public void run(String... args) {
         insererEnseignantsTest();
     }
 
+    /**
+     * Crée et insère un enseignant de test si son email n'existe pas déjà en base.
+     *
+     * @param nom nom de l'enseignant
+     * @param prenom prénom de l'enseignant
+     * @param email adresse email professionnelle
+     * @param telephone numéro de téléphone
+     * @param matricule matricule unique
+     * @param grade grade académique
+     * @param createdBy utilisateur ayant créé la donnée
+     * @return true si l'insertion a réussi ou était déjà présente, false sinon
+     */
     private boolean creerEnseignantTest(String nom, String prenom, String email, String telephone, String matricule, Grade grade, String createdBy) {
         try {
             if (enseignantRepository.existsByEmail(email)) {
@@ -35,7 +63,7 @@ public class EnseignantDataInitializer implements CommandLineRunner {
             }
 
             EnseignantDTO dto = new EnseignantDTO(
-                    null,
+                    null,              // ID auto-généré
                     nom,
                     prenom,
                     email,
@@ -44,7 +72,7 @@ public class EnseignantDataInitializer implements CommandLineRunner {
                     grade,
                     createdBy,
                     LocalDate.now(),
-                    true
+                    true               // Actif par défaut
             );
 
             enseignantService.ajouterEnseignant(dto);
@@ -57,6 +85,10 @@ public class EnseignantDataInitializer implements CommandLineRunner {
         }
     }
 
+    /**
+     * Insère une liste d'enseignants prédéfinis à des fins de test.
+     * Utilise la méthode {@link #creerEnseignantTest} pour chaque enseignant.
+     */
     private void insererEnseignantsTest() {
         boolean success = true;
 
@@ -70,5 +102,4 @@ public class EnseignantDataInitializer implements CommandLineRunner {
             logger.warn("\n Certains enseignants n'ont pas pu être insérés !");
         }
     }
-
 }
