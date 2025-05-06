@@ -1,7 +1,9 @@
 package sn.uasz.utilisateursapi.dtos;
 
 import jakarta.validation.constraints.*;
-import java.time.LocalDateTime;
+import sn.uasz.utilisateursapi.enums.Grade;
+
+import java.time.LocalDate;
 
 public record EnseignantDTO(
         Long id,
@@ -15,17 +17,18 @@ public record EnseignantDTO(
         @NotBlank @Email
         String email,
 
-        @Pattern(regexp = "^\\+?[0-9]{9,15}$")
+        @Pattern(regexp = "^\\+?\\d{9,15}$")
         String telephone,
 
         @NotBlank
         String matricule,
 
-        @NotBlank
-        String grade,
+        @NotNull
+        Grade grade,
 
         String createBy,
-        LocalDateTime createAt
+        LocalDate createAt,
+        Boolean actif
 ) {
     public String nomComplet() {
         return prenom + " " + nom;

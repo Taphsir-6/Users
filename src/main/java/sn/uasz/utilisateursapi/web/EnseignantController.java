@@ -12,7 +12,7 @@ import sn.uasz.utilisateursapi.services.EnseignantService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/enseignants")
+@RequestMapping("/api/enseignants")
 @RequiredArgsConstructor
 @Tag(name = "Enseignants", description = "Gestion des enseignants de l'université")
 public class EnseignantController {
@@ -79,5 +79,22 @@ public class EnseignantController {
     public ResponseEntity<List<EnseignantDTO>> rechercherParNom(@RequestParam String nom) {
         List<EnseignantDTO> resultats = enseignantService.rechercherEnseignantsParNom(nom);
         return ResponseEntity.ok(resultats);
+    }
+    @PutMapping("/{id}/activer")
+    public ResponseEntity<EnseignantDTO> activerEnseignant(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(enseignantService.activerEnseignant(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PutMapping("/{id}/desactiver")
+    public ResponseEntity<EnseignantDTO> desactiverEnseignant(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(enseignantService.desactiverEnseignant(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }

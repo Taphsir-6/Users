@@ -1,0 +1,6 @@
+projectKey=UsersAPI
+serverUrl=http://localhost:9099
+serverVersion=25.4.0.105899
+dashboardUrl=http://localhost:9099/dashboard?id=UsersAPI
+ceTaskId=72d372fa-21db-401e-bbbb-9ca022e90e32
+ceTaskUrl=http://localhost:9099/api/ce/task?id=72d372fa-21db-401e-bbbb-9ca022e90e32
