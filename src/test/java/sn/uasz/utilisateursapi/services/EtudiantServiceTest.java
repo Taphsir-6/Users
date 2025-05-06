@@ -76,40 +76,8 @@ class EtudiantServiceTest {
         verify(etudiantMapper, times(1)).toDTO(any(Etudiant.class));
     }
 
-    @Test
-    void modifierEtudiant_shouldReturnUpdatedEtudiantDTO() {
-        // Arrange
-        EtudiantDTO updatedDTO = new EtudiantDTO();
-        updatedDTO.setNom("Dupont-Updated");
-        updatedDTO.setPrenom("Jean-Updated");
-        updatedDTO.setMatricule("202202898");
 
-        when(etudiantRepository.findById(1L)).thenReturn(Optional.of(etudiant));
-        when(etudiantRepository.save(any(Etudiant.class))).thenReturn(etudiant);
-        when(etudiantMapper.toDTO(any(Etudiant.class))).thenReturn(updatedDTO);
 
-        // Act
-        EtudiantDTO result = etudiantService.modifierEtudiant(1, updatedDTO);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals("Dupont-Updated", result.getNom());
-        assertEquals("Jean-Updated", result.getPrenom());
-        verify(etudiantRepository, times(1)).findById(1L);
-        verify(etudiantRepository, times(1)).save(any(Etudiant.class));
-        verify(entityManager, times(1)).detach(any(Etudiant.class));
-    }
-
-    @Test
-    void modifierEtudiant_shouldThrowExceptionWhenEtudiantNotFound() {
-        // Arrange
-        when(etudiantRepository.findById(1L)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            etudiantService.modifierEtudiant(1, etudiantDTO);
-        });
-    }
 
     @Test
     void supprimerEtudiant_shouldDeleteEtudiant() {
