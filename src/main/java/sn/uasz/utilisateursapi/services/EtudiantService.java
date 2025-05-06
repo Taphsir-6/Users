@@ -56,7 +56,9 @@ public class EtudiantService {
         etudiant.setNom(etudiantDTO.getNom());
         etudiant.setPrenom(etudiantDTO.getPrenom());
         etudiant.setMatricule(etudiantDTO.getMatricule());
-        etudiant.setEmail(etudiantDTO.getEmail());
+        // Générer le nouvel email basé sur le nouveau nom/prénom
+        String email = genererEmail(etudiantDTO.getNom(), etudiantDTO.getPrenom());
+        etudiant.setEmail(email);
         etudiant.setPhoto(etudiantDTO.getPhoto());
         // On ne modifie pas createat et createby
 
@@ -107,7 +109,7 @@ public class EtudiantService {
     }
 
     // Méthode pour générer l'email
-    private String genererEmail(String nom, String prenom) {
+    public String genererEmail(String nom, String prenom) {
         String premiereLettrePrenom = prenom.substring(0, 1).toLowerCase();
         String premiereLettreNom = nom.substring(0, 1).toLowerCase();
         //Générer un nombre aléatoire

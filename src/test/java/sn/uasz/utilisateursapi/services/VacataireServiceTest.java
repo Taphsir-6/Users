@@ -1,7 +1,7 @@
 /**
  * Classe de test pour le service VacataireService.
  * Cette classe contient les tests unitaires pour toutes les opérations de gestion des vacataires.
- * 
+ *
  * @author Omar Diop
  * @version 1.0
  * @since 2025-04-12
@@ -327,3 +327,4 @@ class VacataireServiceTest {
         verify(vacataireRepository, never()).save(any(Vacataire.class));
     }
 }
+
