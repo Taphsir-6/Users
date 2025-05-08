@@ -97,9 +97,9 @@ public class EnseignantDataInitializer implements CommandLineRunner {
         success &= creerEnseignantTest("Ndiaye", "Ibrahima", "ndiaye.ibrahima@uasz.sn", "+221773034455", "181187/B", Grade.VACATAIRE, null, ADMIN_USER);
 
         if (success) {
-            logger.info("\nTous les enseignants ont été insérés avec succès !");
+            logger.info("\n=== Tous les enseignants ont été insérés avec succès !");
         } else {
-            logger.warn("\nCertains enseignants n'ont pas pu être insérés !");
+            logger.warn("\n=== Certains enseignants n'ont pas pu être insérés !");
         }
     }
 }
