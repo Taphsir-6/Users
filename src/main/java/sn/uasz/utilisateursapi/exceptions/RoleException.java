@@ -1,15 +1,13 @@
 package sn.uasz.utilisateursapi.exceptions;
 
-/**
- * Exception levée lorsqu'un enseignant est introuvable dans le système.
- */
-public class EtudiantNotFoundException extends RuntimeException {
+
+public class RoleException extends RuntimeException {
 
     /**
      * Crée une exception avec un message d'erreur.
      * @param message Message décrivant l'erreur.
      */
-    public EtudiantNotFoundException(String message) {
+    public RoleException(String message) {
         super(message);
     }
 
@@ -18,7 +16,7 @@ public class EtudiantNotFoundException extends RuntimeException {
      * @param message Message décrivant l'erreur.
      * @param cause Exception d'origine.
      */
-    public EtudiantNotFoundException(String message, Throwable cause) {
+    public RoleException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -26,7 +24,7 @@ public class EtudiantNotFoundException extends RuntimeException {
      * Crée une exception uniquement avec une cause sous-jacente.
      * @param cause Exception d'origine.
      */
-    public EtudiantNotFoundException(Throwable cause) {
+    public RoleException(Throwable cause) {
         super(cause);
     }
 }

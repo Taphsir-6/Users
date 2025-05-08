@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
+
 import sn.uasz.utilisateursapi.enums.Grade;
 
 /**
@@ -47,6 +49,13 @@ public class Enseignant {
     private LocalDate createAt;
     @Builder.Default
     private boolean actif = true;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "enseignant_roles",
+            joinColumns = @JoinColumn(name = "enseignant_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private List<Role> roles;
 
 
     // Getters/Setters
