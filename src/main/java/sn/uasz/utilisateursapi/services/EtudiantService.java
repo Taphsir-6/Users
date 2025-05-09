@@ -10,15 +10,10 @@ import sn.uasz.utilisateursapi.entities.Etudiant;
 import sn.uasz.utilisateursapi.exceptions.EtudiantNotFoundException;
 import sn.uasz.utilisateursapi.mappers.EtudiantMapper;
 import sn.uasz.utilisateursapi.repositories.EtudiantRepository;
-
-<<<<<<< HEAD
-import java.security.SecureRandom;
-import java.util.Date;
-=======
 import java.time.LocalDate;
->>>>>>> e4e8f7348fab97f79ab855498e7a23ba47f13ad1
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 /**
  * Service de gestion des opérations liées aux étudiants :
@@ -38,15 +33,12 @@ public class EtudiantService {
     @PersistenceContext
     private EntityManager entityManager;
 
-<<<<<<< HEAD
-=======
     // Générateur de nombre aléatoire pour la création des emails
     private final Random random = new Random();
 
     /**
      * Constructeur avec injection de dépendances.
      */
->>>>>>> e4e8f7348fab97f79ab855498e7a23ba47f13ad1
     public EtudiantService(EtudiantRepository etudiantRepository, EtudiantMapper etudiantMapper) {
         this.etudiantRepository = etudiantRepository;
         this.etudiantMapper = etudiantMapper;
@@ -97,16 +89,10 @@ public class EtudiantService {
         etudiant.setNom(etudiantDTO.getNom());
         etudiant.setPrenom(etudiantDTO.getPrenom());
         etudiant.setMatricule(etudiantDTO.getMatricule());
-<<<<<<< HEAD
-        etudiant.setEmail(etudiantDTO.getEmail());
-        etudiant.setPhoto(etudiantDTO.getPhoto());
-        // On ne modifie pas createAt et createby
-=======
 
         // Générer un nouvel email à partir des nouveaux nom/prénom
         String email = genererEmail(etudiantDTO.getNom(), etudiantDTO.getPrenom());
         etudiant.setEmail(email);
->>>>>>> e4e8f7348fab97f79ab855498e7a23ba47f13ad1
 
         // Mise à jour des autres informations
         etudiant.setDateNaissance(etudiantDTO.getDateNaissance());
@@ -158,15 +144,6 @@ public class EtudiantService {
                 .toList();
     }
 
-<<<<<<< HEAD
-    // Méthode pour générer l'email
-    private static final SecureRandom secureRandom = new SecureRandom();
-    public String genererEmail(String nom, String prenom) {
-        String premiereLettrePrenom = prenom.substring(0, 1).toLowerCase();
-        String premiereLettreNom = nom.substring(0, 1).toLowerCase();
-        // Générer un nombre aléatoire sécurisé (CSPRNG)
-        int numeroAleatoire = secureRandom.nextInt(100);
-=======
     /**
      * Génère un email à partir du nom et prénom de l’étudiant.
      * Exemple : dupontjj42@zig.univ.sn
@@ -175,7 +152,6 @@ public class EtudiantService {
         String premiereLettrePrenom = prenom.substring(0, 1).toLowerCase();
         String premiereLettreNom = nom.substring(0, 1).toLowerCase();
         int numeroAleatoire = random.nextInt(100);
->>>>>>> e4e8f7348fab97f79ab855498e7a23ba47f13ad1
         return nom.toLowerCase() + premiereLettrePrenom + premiereLettreNom + numeroAleatoire + "@zig.univ.sn";
     }
 }
