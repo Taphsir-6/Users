@@ -3,8 +3,7 @@ package sn.uasz.utilisateursapi.mappers;
 import org.springframework.stereotype.Component;
 import sn.uasz.utilisateursapi.dtos.EtudiantDTO;
 import sn.uasz.utilisateursapi.entities.Etudiant;
-import sn.uasz.utilisateursapi.entities.Role;
-
+import java.util.List;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -4,8 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sn.uasz.utilisateursapi.dtos.EnseignantDTO;
 import sn.uasz.utilisateursapi.enums.Grade;
+import sn.uasz.utilisateursapi.entities.Role;
 import sn.uasz.utilisateursapi.repositories.EnseignantRepository;
 import sn.uasz.utilisateursapi.services.EnseignantService;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -29,7 +31,7 @@ class EnseignantDataInitializerTest {
 
         boolean result = invokeCreerEnseignant(
                 "Sall", "Ousmane", "test@uasz.sn", "+221771112233",
-                "123456/A", Grade.PROFESSEUR_ASSIMILE, "testuser"
+                "123456/A", Grade.PROFESSEUR_ASSIMILE, List.of(), "testuser"
         );
 
         assertTrue(result);
@@ -43,7 +45,7 @@ class EnseignantDataInitializerTest {
 
         boolean result = invokeCreerEnseignant(
                 "Sow", "Abdou", "exist@uasz.sn", "+221771234567",
-                "654321/B", Grade.VACATAIRE, "testuser"
+                "654321/B", Grade.VACATAIRE, List.of(), "testuser"
         );
 
         assertTrue(result);  // La méthode retourne true même si on ne recrée pas
@@ -57,7 +59,7 @@ class EnseignantDataInitializerTest {
 
         boolean result = invokeCreerEnseignant(
                 "Ndiaye", "Aissatou", "fail@uasz.sn", "+221779998877",
-                "999999/Z", Grade.PROFESSEUR, "admin"
+                "999999/Z", Grade.PROFESSEUR, List.of(), "admin"
         );
 
         assertFalse(result);
@@ -67,14 +69,14 @@ class EnseignantDataInitializerTest {
     // 🔧 Hack pour appeler la méthode protégée (ou privée via réflexion si besoin)
     private boolean invokeCreerEnseignant(String nom, String prenom, String email,
                                           String telephone, String matricule,
-                                          Grade grade, String createdBy) {
+                                          Grade grade, List<Role> roles, String createdBy) {
         try {
             var method = EnseignantDataInitializer.class.getDeclaredMethod(
                     "creerEnseignantTest", String.class, String.class, String.class,
-                    String.class, String.class, Grade.class, String.class
+                    String.class, String.class, Grade.class, List.class, String.class
             );
             method.setAccessible(true);
-            return (boolean) method.invoke(initializer, nom, prenom, email, telephone, matricule, grade, createdBy);
+            return (boolean) method.invoke(initializer, nom, prenom, email, telephone, matricule, grade, roles, createdBy);
         } catch (Exception e) {
             throw new RuntimeException("Échec d'invocation de creerEnseignantTest", e);
         }
