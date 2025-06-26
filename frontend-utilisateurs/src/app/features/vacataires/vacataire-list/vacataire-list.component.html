@@ -1,0 +1,49 @@
+<div class="vacataire-list-container">
+  <div class="vacataire-list-header">
+    <button mat-raised-button class="add-vacataire-btn" (click)="ajouterVacataire()">Ajouter un vacataire</button>
+    <mat-form-field appearance="outline" class="search-field search-right">
+      <mat-label>Recherche</mat-label>
+      <input matInput [(ngModel)]="searchTerm" (ngModelChange)="applyFilter()" placeholder="Nom ou prénom...">
+    </mat-form-field>
+  </div>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+    <ng-container matColumnDef="nom">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Nom</th>
+      <td mat-cell *matCellDef="let v">{{ v.nom }}</td>
+    </ng-container>
+    <ng-container matColumnDef="prenom">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Prénom</th>
+      <td mat-cell *matCellDef="let v">{{ v.prenom }}</td>
+    </ng-container>
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+      <td mat-cell *matCellDef="let v">{{ v.email }}</td>
+    </ng-container>
+    <ng-container matColumnDef="telephone">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Téléphone</th>
+      <td mat-cell *matCellDef="let v">{{ v.telephone }}</td>
+    </ng-container>
+    <ng-container matColumnDef="specialite">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Spécialité</th>
+      <td mat-cell *matCellDef="let v">{{ v.specialite }}</td>
+    </ng-container>
+    <ng-container matColumnDef="actif">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Actif</th>
+      <td mat-cell *matCellDef="let v">{{ v.actif ? 'Oui' : 'Non' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let v">
+        <button mat-icon-button class="edit-icon" [routerLink]="['/vacataires', v.id, 'edit']">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button class="delete-icon" (click)="deleteVacataire(v.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="['nom', 'prenom', 'email', 'telephone', 'specialite', 'actif', 'actions']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['nom', 'prenom', 'email', 'telephone', 'specialite', 'actif', 'actions'];"></tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+</div>

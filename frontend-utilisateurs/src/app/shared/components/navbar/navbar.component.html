@@ -1,0 +1,22 @@
+<mat-toolbar color="primary" class="navbar">
+  <span class="logo">Gestion Utilisateurs</span>
+  <span class="spacer"></span>
+  <ng-container *ngIf="router.url !== '/'">
+    <a mat-button routerLink="/" routerLinkActive="active">
+      <mat-icon>home</mat-icon>
+      <span class="nav-label">Accueil</span>
+    </a>
+    <a mat-button routerLink="/etudiants" routerLinkActive="active">
+      <mat-icon>school</mat-icon>
+      <span class="nav-label">Étudiants</span>
+    </a>
+    <a mat-button routerLink="/enseignants" routerLinkActive="active">
+      <mat-icon>person</mat-icon>
+      <span class="nav-label">Enseignants</span>
+    </a>
+    <a mat-button routerLink="/vacataires" routerLinkActive="active">
+      <mat-icon>work</mat-icon>
+      <span class="nav-label">Vacataires</span>
+    </a>
+  </ng-container>
+</mat-toolbar>

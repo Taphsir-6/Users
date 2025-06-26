@@ -1,0 +1,40 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="enseignant-form">
+  <mat-form-field appearance="outline">
+    <mat-label>Nom</mat-label>
+    <input matInput formControlName="nom" required>
+    <mat-error *ngIf="form.get('nom')?.invalid && form.get('nom')?.touched">Nom requis</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Prénom</mat-label>
+    <input matInput formControlName="prenom" required>
+    <mat-error *ngIf="form.get('prenom')?.invalid && form.get('prenom')?.touched">Prénom requis</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" required type="email">
+    <mat-error *ngIf="form.get('email')?.invalid && form.get('email')?.touched">Email valide requis</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Téléphone</mat-label>
+    <input matInput formControlName="telephone" required>
+    <mat-error *ngIf="form.get('telephone')?.invalid && form.get('telephone')?.touched">Téléphone requis</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Matricule</mat-label>
+    <input matInput formControlName="matricule">
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Grade</mat-label>
+    <input matInput formControlName="grade">
+  </mat-form-field>
+  <!-- Champ Actif corrigé -->
+  <mat-checkbox formControlName="actif">Actif</mat-checkbox>
+  <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+  <button mat-raised-button 
+          [color]="enseignantId ? 'warn' : 'primary'" 
+          type="submit" 
+          [disabled]="loading">
+    {{ enseignantId ? 'Modifier' : 'Enregistrer' }}
+  </button>
+  <button mat-button type="button" (click)="form.reset()" [disabled]="loading">Réinitialiser</button>
+</form>

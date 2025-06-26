@@ -1,0 +1,21 @@
+.home-container {
+  margin: 48px auto;
+  max-width: 600px;
+  text-align: center;
+}
+.quick-links {
+  margin-top: 32px;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+@media (max-width: 600px) {
+  .home-container {
+    margin: 24px 8px;
+  }
+  .quick-links {
+    flex-direction: column;
+    gap: 12px;
+  }
+}

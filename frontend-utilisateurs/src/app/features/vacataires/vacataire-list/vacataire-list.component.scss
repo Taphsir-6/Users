@@ -1,0 +1,38 @@
+.edit-icon {
+  color: #1976d2 !important; /* bleu Material */
+}
+.delete-icon {
+  color: #d32f2f !important; /* rouge Material */
+}
+
+.vacataire-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.add-vacataire-btn {
+  background-color: #388e3c !important; /* vert Material */
+  color: #fff !important;
+}
+
+.search-field {
+  margin-bottom: 0;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: 320px;
+}
+
+.search-field.search-right {
+  float: none;
+}
+
+.vacataire-list-container {
+  text-align: initial;
+}
+
+.mat-table {
+  margin-top: 24px;
+}
